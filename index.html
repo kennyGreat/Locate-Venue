@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Property Matchmaker</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0c5c4e">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--ink:#12232b;--mut:#5b6b72;--line:#d6dedb;--bg:#eef1ee;--card:#fff;--ac:#0c5c4e;--ac2:#dcebe6;--amb:#c98a12;--amb2:#f7ecd2;--brick:#a8392a;--brick2:#f6e1dd}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Avenir Next","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:560px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px))}
+header.top{display:flex;justify-content:space-between;align-items:baseline;padding:calc(14px + env(safe-area-inset-top,0px)) 0 6px}
+header.top b{font-size:15px;font-weight:700;letter-spacing:-.1px}
+header.top span{font-size:12.5px;color:var(--mut)}
+h1{font-size:26px;line-height:1.15;letter-spacing:-.6px;margin:14px 0 6px;font-weight:750}
+h2{font-size:17px;margin:22px 0 8px;font-weight:700;letter-spacing:-.2px}
+.lead{color:var(--mut);margin:0 0 18px;font-size:15px}
+.fld{padding:16px 0;border-top:1px solid var(--line)}
+.fld:first-of-type{border-top:0}
+.fld>label,.q{display:block;font-weight:650;font-size:15.5px;margin-bottom:8px}
+.fld>label i,.q i{font-style:normal;font-weight:400;color:var(--mut)}
+.sub{display:block;font-size:13.5px;color:var(--mut);font-weight:400;margin:-4px 0 8px}
+.hint{font-size:13px;color:var(--mut);margin:6px 0 0}
+input,select,textarea{width:100%;min-height:50px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;font-size:16px;outline:none}
+textarea{min-height:104px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(12,92,78,.14)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid rgba(12,92,78,.45);outline-offset:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row2.wide{grid-template-columns:1.4fr 1fr}
+.pair{margin-top:10px}
+.pair label{display:block;font-size:14px;color:var(--ink);margin-bottom:5px;font-weight:600}
+.tog{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden}
+.tog button{min-height:54px;border:0;background:#fff;font-weight:700;font-size:16px;cursor:pointer}
+.tog button+button{border-left:1.5px solid var(--ink)}
+.tog button.on{background:var(--ink);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:0 20px;border-radius:12px;border:1.5px solid var(--ink);background:#fff;font-weight:700;font-size:15.5px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn.main{background:var(--ac);border-color:var(--ac);color:#fff}
+.btn.block{display:flex;width:100%}
+.btn.sm{min-height:42px;padding:0 14px;font-size:14px;border-radius:10px}
+.btn.danger{color:var(--brick);border-color:#e4bdb6}
+.btn:active{transform:translateY(1px)}
+.err{background:var(--brick2);color:var(--brick);border-radius:10px;padding:10px 13px;font-size:14px;margin:14px 0 0}
+.ok{background:var(--ac2);color:var(--ac);border-radius:10px;padding:10px 13px;font-size:14px;margin:12px 0}
+.bad .tog,.bad input,.bad select{border-color:var(--brick)}
+.recap{background:var(--ink);color:#fff;border-radius:14px;padding:14px 16px;margin:12px 0}
+.recap b{display:block;font-size:17px;letter-spacing:-.2px}
+.recap span{display:block;font-size:14px;opacity:.82;margin-top:2px}
+.recap .acts{display:flex;gap:8px;margin-top:12px}
+.recap .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.chips{display:flex;gap:8px;margin:14px 0 4px;flex-wrap:wrap}
+.chip{min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:650;font-size:14px;cursor:pointer}
+.chip.on{background:var(--ac2);border-color:var(--ac);color:var(--ac)}
+.note{font-size:13.5px;color:var(--mut);margin:8px 0}
+.match{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.match .hd{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.match h3{margin:0;font-size:17px;line-height:1.25;letter-spacing:-.2px}
+.match .where{font-size:14px;color:var(--mut);margin-top:2px}
+.match .price{font-weight:700;margin-top:6px}
+.score{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;text-align:right}
+.score small{font-size:15px;font-weight:700}
+.score.hi{color:var(--ac)}.score.mid{color:var(--amb)}.score.lo{color:var(--brick)}
+.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 4px}
+.cell .bar{display:block;height:8px;border-radius:4px;background:#e6ebe9;overflow:hidden}
+.cell .bar i{display:block;height:100%;background:var(--ac)}
+.cell.part .bar i{background:var(--amb)}
+.cell b{display:block;font-size:12.5px;margin-top:5px}
+.cell em{display:block;font-style:normal;font-size:12px;color:var(--mut)}
+details{margin-top:10px}
+summary{cursor:pointer;font-size:14px;font-weight:650;color:var(--ac);min-height:32px;display:flex;align-items:center}
+.why{list-style:none;margin:6px 0 0;padding:0;font-size:14px}
+.why li{padding:6px 0 6px 24px;position:relative;border-top:1px solid #edf1ef}
+.why li:before{content:"✓";position:absolute;left:3px;color:var(--ac);font-weight:800}
+.why li.p:before{content:"~";color:var(--amb)}
+.why li.n:before{content:"✗";color:var(--brick)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.empty{text-align:center;padding:34px 10px;color:var(--mut)}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.empty .btn{margin-top:14px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--ac2);color:var(--ac);margin-right:6px}
+.tag.rent{background:var(--amb2);color:#7a5200}
+.sw{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;margin:10px 0 14px}
+.sw.two{grid-template-columns:1fr 1fr}
+.sw button{min-height:46px;border:0;background:#fff;font-weight:700;font-size:14px;cursor:pointer;padding:4px 6px;line-height:1.2}
+.sw button+button{border-left:1.5px solid var(--ink)}
+.sw button.on{background:var(--ink);color:#fff}
+.draft{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.draft .src{font-size:13.5px;color:var(--mut);display:flex;gap:10px;align-items:flex-start}
+.draft .src input{width:22px;min-height:22px;margin-top:3px;flex:none}
+.draft .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.draft .grid .full{grid-column:1/-1}
+.draft label{display:block;font-size:12.5px;font-weight:650;color:var(--mut);margin-bottom:3px}
+.draft input,.draft select,.draft textarea{min-height:44px;font-size:15px}
+.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.item h3{margin:0;font-size:16px;letter-spacing:-.15px}
+.item p{margin:3px 0 0;font-size:14px;color:var(--mut)}
+nav.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav.bar div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav.bar button{border:0;background:none;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12.5px;font-weight:650;color:var(--mut);cursor:pointer}
+nav.bar button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.bar button.on{color:var(--ac)}
+@media (min-width:700px){.app{padding-top:10px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+<div class="app">
+ <header class="top"><b>Property Matchmaker</b><span id="count"></span></header>
+ <main id="v"></main>
+</div>
+<nav class="bar" aria-label="Main"><div id="nav"></div></nav>
+<script>
+/*CORE*/
+const COUNTRIES=["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czechia","Democratic Republic of the Congo","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+const NG_STATES=["Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno","Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","FCT Abuja","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara"];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const CURR_ALL=(()=>{try{return Intl.supportedValuesOf('currency')}catch(e){return['NGN','USD','GBP','EUR','CAD','AUD','ZAR','GHS','KES','AED','INR','CNY','JPY']}})();
+const TOPC=['NGN','USD','GBP','EUR','GHS','KES','ZAR','AED','CAD'];
+const CURR=TOPC.concat(CURR_ALL.filter(c=>!TOPC.includes(c)));
+let DN=null;try{DN=new Intl.DisplayNames(['en'],{type:'currency'})}catch(e){}
+const curLabel=c=>{let n='';try{n=DN?DN.of(c):''}catch(e){}return n&&n!==c?c+' ('+n+')':c};
+const money=(n,c)=>{n=Number(n)||0;try{return new Intl.NumberFormat('en',{style:'currency',currency:c||'NGN',currencyDisplay:'narrowSymbol',maximumFractionDigits:0}).format(n)}catch(e){return (c||'')+' '+n.toLocaleString()}};
+
+/* Property types */
+const KINDS=[['house','House'],['duplex','Duplex'],['bungalow','Bungalow'],['flat','Flat / apartment'],['self-contain','Self-contain / room'],['terrace','Terrace'],['land','Land / plot'],['commercial','Commercial (shop, office, warehouse)'],['other','Other']];
+const kl=k=>(KINDS.find(x=>x[0]===k)||[0,k||''])[1].toLowerCase();
+const KN=[['duplex',/duplex|mansion|detached house/],['bungalow',/bungalow/],['self-contain',/self.?contain|mini.?flat|single room|room (?:and|&) parlou?r/],['flat',/\bflats?\b|apartment/],['terrace',/terrace/],['land',/\bland\b|\bplots?\b|hectare/],['commercial',/\bshops?\b|\boffices?\b|warehouse|plaza|commercial/],['house',/\bhouse\b|\bhome\b/]];
+const kindOf=t=>{t=String(t||'').toLowerCase();for(const k of KN)if(k[1].test(t))return k[0];return ''};
+const FAM={house:'h',duplex:'h',bungalow:'h',terrace:'h',flat:'f','self-contain':'f'};
+
+/* Transaction category: two categories only. BUY = to buy / for sale. RENT = to rent / for rent / to let / for let. */
+function normTx(v){
+ const t=String(v||'').toLowerCase().replace(/[_\-]+/g,' ').replace(/\s+/g,' ').trim();
+ if(!t)return '';
+ if(/^(to buy|buy|for sale|sale|purchase|to purchase)$/.test(t))return 'buy';
+ if(/^(to rent|rent|for rent|to let|for let|let|for letting|letting|rental|lease|for lease|to lease)$/.test(t))return 'rent';
+ const rent=/\b(for rent|to rent|to let|for let|for letting|rent|rental|rented|lease|leasing|tenant|let out|letting)\b/.test(t);
+ const buy=/\b(for sale|to buy|buy|buying|buyer|purchase|purchasing|selling|sell|sale)\b/.test(t);
+ if(rent===buy)return '';
+ return rent?'rent':'buy';
+}
+const txLabel=t=>t==='rent'?'To rent':t==='buy'?'To buy':'';
+
+/* Text readers */
+const PH=/(?:\+?234|\b0)[789]\d[\d\s-]{7,10}\d/;
+const WN={one:1,two:2,three:3,four:4,five:5,six:6};
+const bedsOf=t=>{const m=String(t||'').match(/\b(\d|one|two|three|four|five|six)\s*[- ]?\s*(?:bed(?:room)?s?|br|bdrm)\b/i);return m?(+m[1]||WN[m[1].toLowerCase()]||0):0};
+const bathsOf=t=>{const m=String(t||'').match(/\b(\d+)\s*[- ]?\s*bath(?:room)?s?\b/i);return m?+m[1]:0};
+const toiletsOf=t=>{const m=String(t||'').match(/\b(\d+)\s*[- ]?\s*(?:toilets?|wc)\b/i);return m?+m[1]:0};
+const parkingOf=t=>{const m=String(t||'').match(/\b(\d+)\s*[- ]?\s*(?:car\s*)?(?:parking|garage|car park)/i);return m?+m[1]:0};
+const furnishOf=t=>{const z=String(t||'').toLowerCase();return /unfurnished/.test(z)?'un':/semi[- ]?furnished/.test(z)?'semi':/fully[- ]?furnished/.test(z)?'full':/\bfurnished\b/.test(z)?'any':''};
+function amtOf(t){
+ t=String(t||'').replace(/https?:\/\/\S+/g,' ').replace(new RegExp(PH.source,'g'),' ');
+ const re=/(?:₦|ngn\s*|\bn\s?)?(\d[\d,]*(?:\.\d+)?)\s*(billion|bn|million|mil|m|thousand|k)?\b(?!\s*-?\s*(?:bed|br\b|bath|toilet|sqm|plots?\b|units?\b|rooms?|flats?|bq|cars?|storey|story|%))/gi;
+ let m;
+ while((m=re.exec(t))){const u=(m[2]||'').toLowerCase();
+  const v=Math.round(parseFloat(m[1].replace(/,/g,''))*({billion:1e9,bn:1e9,million:1e6,mil:1e6,m:1e6,thousand:1e3,k:1e3}[u]||1));
+  if(v>=10000&&!(v>=1990&&v<=2100&&!u))return v}
+ return 0}
+function currencyIn(t){const x=String(t||'').toUpperCase();return /\$|\bUSD\b/.test(x)?'USD':/£|\bGBP\b/.test(x)?'GBP':/€|\bEUR\b/.test(x)?'EUR':/\bZAR\b/.test(x)?'ZAR':/\bGHS\b/.test(x)?'GHS':/\bKES\b/.test(x)?'KES':/\bAED\b/.test(x)?'AED':/\bINR\b|₹/.test(x)?'INR':/\bCAD\b/.test(x)?'CAD':/\bAUD\b/.test(x)?'AUD':'NGN'}
+function countryIn(t){const z=String(t||'').toLowerCase();if(/\b(uk|u\.k\.|britain)\b/.test(z))return 'United Kingdom';if(/\b(usa|u\.s\.a?\.?)\b/.test(z))return 'United States';if(/\buae\b/.test(z))return 'United Arab Emirates';return COUNTRIES.slice().sort((a,b)=>b.length-a.length).find(c=>z.includes(c.toLowerCase()))||'Nigeria'}
+const hasW=(t,a)=>new RegExp('(^|[^a-z])'+a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z]|$)').test(t);
+const AREAS=['barnawa','malali','ungwan rimi','ungwan sarki','ungwan pama','angwan pama','kakuri','sabon tasha','kamazou','mahuta','narayi','rigasa','romi','television','gonin gora','tudun wada','kawo','maitama','asokoro','gwarinpa','lekki','ajah','ikeja'];
+function stateIn(t){const z=String(t||'').toLowerCase();if(/\babuja\b|\bfct\b/.test(z))return 'FCT Abuja';const f=NG_STATES.filter(s=>s!=='FCT Abuja'&&hasW(z,s.toLowerCase())).sort((a,b)=>b.length-a.length);return f[0]||''}
+function areasIn(t,known){
+ const z=String(t||'').toLowerCase(),set=new Set(AREAS);(known||[]).forEach(x=>String(x||'').toLowerCase().split(/[,/]/).forEach(p=>{p=p.trim();if(p.length>2)set.add(p)}));
+ const f=[...set].filter(a=>hasW(z,a)).map(a=>a.replace(/\b\w/g,c=>c.toUpperCase()));
+ if(f.length)return f.join(', ');
+ const m=String(t||'').match(/(?:in|around|near|at|located in|based in)\s+([A-Za-z][A-Za-z .'-]{2,40})(?=,|\.|\n|\b(?:for sale|for rent|to rent|to buy|asking|price|budget|with|and)\b|$)/);
+ return m?m[1].trim():''}
+
+/* Additional requirements */
+const FEAT=[
+ ['borehole',/bore ?hole|running water|water supply|well water/],['gated / estate',/gated|\bestate\b|secure compound/],['fence',/\bfenc/],
+ ['security',/security|cctv|guard|gateman/],['generator / solar',/generator|solar|inverter|prepaid meter|24 ?(?:hrs?|hours)? ?(?:light|power|electricity)/],
+ ['swimming pool',/swimming pool|\bpool\b/],['boys quarters',/\bb\.?q\b|boys'? ?quarters?/],['ensuite rooms',/en ?suite/],['tiled floors',/\btiled|\btiles\b/],
+ ['fitted kitchen',/fitted kitchen|kitchen cabinets?/],['balcony',/balcon/],['tarred road',/tarred|good road|motorable|access road/],['lift',/\blift\b|elevator/],
+ ['C of O',/\bc\.? ?of ?o\b|certificate of occupancy/],['R of O',/\br\.? ?of ?o\b|right of occupancy/],["Governor's consent",/governor'?s? consent/],['survey plan',/survey/],['registered title',/deed of (?:assignment|conveyance)|registered title|good title/],
+ ['near a school',/school/],['near a market',/market/],['near a mosque or church',/mosque|church/]];
+const STOP=new Set('looking property need want rent sale buy for with around near please client budget house apartment from that this have has the and you any area must should within move soon ready immediately other details also would like prefer preferably nice good very more less than about into your their there where which what when some such only just then them they been will can could get got take make made well'.split(' '));
+function factsOf(l){const t=[l.title,l.desc].filter(Boolean).join(' ');return{beds:+l.beds||bedsOf(t),baths:+l.baths||bathsOf(t),toilets:toiletsOf(t),parking:parkingOf(t),furnish:furnishOf(t),raw:t.toLowerCase()}}
+function reqsOf(text,r){
+ const t=String(text||''),z=t.toLowerCase(),out=[];
+ const b=bedsOf(t);if(b)out.push({label:b+'+ bedrooms',ok:f=>f.beds>=b,has:f=>f.beds>0});
+ const ba=bathsOf(t);if(ba)out.push({label:ba+'+ bathrooms',ok:f=>f.baths>=ba,has:f=>f.baths>0});
+ const to=toiletsOf(t);if(to)out.push({label:to+'+ toilets',ok:f=>f.toilets>=to,has:f=>f.toilets>0});
+ const pk=parkingOf(t);if(pk)out.push({label:pk+'+ parking spaces',ok:f=>f.parking>=pk,has:f=>f.parking>0});
+ const fu=furnishOf(t);if(fu){const lab={un:'unfurnished',semi:'semi-furnished',full:'fully furnished',any:'furnished'}[fu];out.push({label:lab,has:f=>!!f.furnish,ok:f=>fu==='any'?['semi','full','any'].includes(f.furnish):fu==='semi'?['semi','full'].includes(f.furnish):f.furnish===fu})}
+ FEAT.forEach(([label,re])=>{if(re.test(z))out.push({label,has:()=>true,ok:f=>re.test(f.raw)})});
+ if(!out.length&&z.trim().length>=3){
+  const skip=new Set(norm([r&&r.loc,r&&r.state,r&&r.country,r&&r.kindText,r&&r.kind].join(' ')).split(' '));
+  const toks=[...new Set(norm(z).split(' ').filter(w=>w.length>3&&!/^\d+$/.test(w)&&!STOP.has(w)&&!skip.has(w)))].slice(0,6);
+  toks.forEach(w=>out.push({label:'“'+w+'”',has:()=>true,ok:f=>f.raw.includes(w)}));
+ }
+ return out}
+
+/* Matching: category is a strict gate. Four criteria at 25 points each. */
+const pad=s=>' '+norm(s)+' ';
+function sc(l,r){
+ const lt=normTx(l.tx),rt=normTx(r.tx);
+ if(!lt||!rt||lt!==rt)return null;
+ const parts=[];
+ // 1. Property type (25)
+ {const rk=r.kind==='other'?(kindOf(r.kindText)||'other'):r.kind,lk=l.kind||kindOf((l.title||'')+' '+(l.desc||''));let f=0,n;
+  if(!rk)n='No property type was given';
+  else if(rk==='other'&&r.kindText&&pad((l.title||'')+' '+(l.desc||'')).includes(pad(r.kindText)))f=1,n='Mentions “'+r.kindText+'”';
+  else if(!lk)n='The listing does not say what type of property it is';
+  else if(rk===lk)f=1,n='Same type: '+kl(lk);
+  else if(FAM[rk]&&FAM[rk]===FAM[lk])f=.5,n='Similar type: wanted '+kl(rk)+', this is a '+kl(lk);
+  else n='Wanted '+kl(rk)+', this is a '+kl(lk);
+  parts.push({short:'Type',pts:25*f,n})}
+ // 2. Preferred location (25): area 17.5 + state 7.5 (all 25 on area if no state asked)
+ {const areas=String(r.loc||'').split(/[,;/]|\band\b/i).map(norm).filter(Boolean),ltext=pad([l.loc,l.state,l.title].join(' ')),rs=norm(r.state),ls=norm(l.state);
+  let pts=0,n;
+  if(r.country&&l.country&&norm(r.country)!==norm(l.country))n='Different country: wanted '+r.country+', this is in '+l.country;
+  else{
+   const hit=areas.find(a=>ltext.includes(' '+a+' '));
+   const aW=rs?17.5:25,sW=rs?7.5:0;
+   if(hit)pts+=aW;
+   let sn='';
+   if(rs){const known=ls||ltext.includes(' '+rs+' ');
+    if(known&&(ls===rs||ltext.includes(' '+rs+' ')))pts+=sW,sn='state matches';
+    else if(known&&ls)sn='different state ('+l.state+')';
+    else if(hit)pts+=sW,sn='state not stated in the listing';
+    else sn='state not confirmed'}
+   n=(hit?'Area matches ('+hit.replace(/\b\w/g,c=>c.toUpperCase())+')':areas.length?'Area differs from '+String(r.loc).trim():'No area was given')+(sn?'; '+sn:'')}
+  parts.push({short:'Location',pts,n})}
+ // 3. Budget (25)
+ {let f=0,n;const price=+l.price||0,bud=+r.budget||0;
+  if(!bud)n='No budget was given';
+  else if(!price)n='The listing has no price';
+  else if((r.currency||'NGN')!==(l.currency||'NGN'))n='Currency differs ('+(l.currency||'NGN')+' listing, '+(r.currency||'NGN')+' budget), so the budget was not compared';
+  else{const ask=lt==='rent'&&l.per==='month'?price*12:price,ratio=ask/bud;
+   f=ratio<=1?1:ratio<=1.05?.8:ratio<=1.1?.6:ratio<=1.2?.3:0;
+   n=ratio<=1?'Within budget ('+money(ask,l.currency)+(lt==='rent'?' a year':'')+')':'About '+Math.round((ratio-1)*100)+'% over budget ('+money(ask,l.currency)+(lt==='rent'?' a year':'')+')'}
+  parts.push({short:'Budget',pts:25*f,n})}
+ // 4. Additional requirements (25)
+ {const need=reqsOf(r.extra,r);let f,n;
+  if(!need.length)f=1,n='No extra requirements to check';
+  else{const fa=factsOf(l),met=[],miss=[];need.forEach(q=>(q.ok(fa)?met:miss).push(q.label));
+   f=met.length/need.length;
+   n=met.length+' of '+need.length+' met'+(met.length?'. Found: '+met.join(', '):'')+(miss.length?'. Not found: '+miss.join(', '):'')}
+  parts.push({short:'Extras',pts:25*f,n})}
+ parts.forEach(p=>p.pts=Math.round(p.pts*10)/10);
+ return{total:Math.round(parts.reduce((a,p)=>a+p.pts,0)),parts}}
+
+/* Import parsing */
+function pReq(b){
+ b=String(b||'');const t=b.replace(/https?:\/\/\S+/g,' ').toLowerCase(),ph=((b.match(PH)||[''])[0]).replace(/[\s-]/g,'');
+ const tx=normTx(t),country=countryIn(t);let budget=amtOf(b);if(tx==='rent'&&/\b(monthly|per month|a month|\/month)\b/.test(t))budget*=12;
+ return{name:'',phone:ph,tx,kind:kindOf(t),kindText:'',loc:areasIn(b),state:country==='Nigeria'?stateIn(t):'',country,budget:budget||'',currency:currencyIn(b),extra:b.trim()}}
+function pLst(b,known){
+ b=String(b||'');const t=b.toLowerCase(),tx=normTx(t),k=kindOf(t),x=bedsOf(b),country=countryIn(t),ph=((b.match(PH)||[''])[0]).replace(/[\s-]/g,'');
+ return{title:(x?x+'-bedroom ':'')+(k?kl(k):'property'),tx,kind:k,loc:areasIn(b,known),state:country==='Nigeria'?stateIn(t):'',country,price:amtOf(b)||'',currency:currencyIn(b),per:/per month|monthly|\/month|a month/.test(t)?'month':'year',beds:x||'',phone:ph,desc:b.trim()}}
+function classifyMixed(b){
+ const t=String(b||'').toLowerCase();
+ const rq=[/looking for|in search of|searching for|seeking|need(?:s)? (?:a |an |one |to rent|to buy)?|client (?:is )?looking|buyer wants|tenant wants|wanted to rent|wanted to buy|requirements?|budget of|my budget|please get me|help me find|urgently (?:need|want)/,/ to rent| to buy| to purchase/];
+ const ls=[/available (?:now|for|at)|for sale|asking price|price is|selling at|property for sale|direct (?:owner|mandate)|inspection (?:is )?available|owner wants|property available|to let|for rent/,/bedroom|bedrooms|duplex|bungalow|flat|apartment|plot of land|sqm/];
+ const score=a=>a.reduce((n,re)=>n+(re.test(t)?(re===a[0]?3:1):0),0);
+ const r=score(rq),l=score(ls);
+ if(!r&&!l)return 'review';if(r>=3&&r>l)return 'request';if(l>=3&&l>r)return 'listing';if(r>l+1)return 'request';if(l>r+1)return 'listing';return 'review'}
+/*END CORE*/
+
+/* ---------- State ---------- */
+const KEY='matchmaker_v1';
+let S={reqs:[],lsts:[]};
+try{const x=localStorage.getItem(KEY);if(x)S=Object.assign(S,JSON.parse(x));else migrate()}catch(e){}
+function migrate(){ // bring over data saved by the older Property Desk app, leaving the old copy untouched
+ const old=JSON.parse(localStorage.getItem('propdesk_v1')||'null');if(!old)return;
+ const tx=v=>/rent/i.test(v||'')?'rent':'buy';
+ (old.listings||[]).filter(l=>l.status==='Available').forEach(l=>S.lsts.push({id:uid(),tx:tx(l.type),kind:KN.some(k=>k[0]===l.kind)?l.kind:kindOf(l.kind+' '+l.title),title:l.title||'Property',loc:l.loc||'',state:'',country:l.country||'Nigeria',currency:l.currency||'NGN',price:+l.price||'',per:l.per||'year',beds:l.beds||'',phone:l.phone||'',desc:l.desc||l.raw||l.title||'',at:Date.now()}));
+ (old.reqs||[]).forEach(r=>S.reqs.push({id:uid(),name:r.name||'',phone:r.phone||'',tx:tx(r.tx),kind:KN.some(k=>k[0]===r.kind)?r.kind:'',kindText:'',loc:r.loc||'',state:'',country:r.country||'Nigeria',budget:+r.budget||'',currency:r.currency||'NGN',extra:r.raw||'',at:Date.now()}));
+ persist()}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const blank=()=>({id:null,name:'',phone:'',tx:'',kind:'',kindText:'',loc:'',state:'',country:'Nigeria',budget:'',currency:'NGN',extra:''});
+let F=blank(),ERR=[],view='find',sub='form',activeReq=null,activeLst=null,minScore=0,savedTab='req',M={mode:'mixed',text:'',src:'WhatsApp',draft:null,msg:''};
+
+/* ---------- Helpers ---------- */
+const fmtNum=v=>v?Number(v).toLocaleString('en-US'):'';
+const waNum=(p,country)=>{p=String(p||'').trim();const plus=p.startsWith('+');p=p.replace(/\D/g,'');if(!p)return '';if(!plus&&p.startsWith('0')&&country==='Nigeria')p='234'+p.slice(1);return p};
+const priceTxt=l=>money(l.price,l.currency)+(normTx(l.tx)==='rent'?(l.per==='month'?' a month':' a year'):'');
+const placeTxt=o=>[o.loc,o.state,o.country].filter((x,i,a)=>x&&a.indexOf(x)===i).join(', ');
+const reqLine=r=>[txLabel(normTx(r.tx)),r.kind==='other'?(r.kindText||'other'):kl(r.kind)].filter(Boolean).join(' · ');
+function matchesForReq(r){const el=[];let other=0;S.lsts.forEach(l=>{const x=sc(l,r);if(x)el.push({l,x});else other++});el.sort((a,b)=>b.x.total-a.x.total||(+a.l.price||0)-(+b.l.price||0));return{el,other}}
+function matchesForLst(l){const el=[];S.reqs.forEach(r=>{const x=sc(l,r);if(x)el.push({r,x})});el.sort((a,b)=>b.x.total-a.x.total);return el}
+const tier=n=>n>=75?'hi':n>=50?'mid':'lo';
+
+/* ---------- Rendering ---------- */
+const ICON={find:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',imp:'<svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>',sav:'<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>'};
+function go(v){view=v;window.scrollTo(0,0);render()}
+function render(){
+ $('nav').innerHTML=[['find','Find'],['imp','Import'],['sav','Saved']].map(t=>`<button class="${view===t[0]?'on':''}" aria-current="${view===t[0]?'page':'false'}" onclick="go('${t[0]}')">${ICON[t[0]]}${t[1]}</button>`).join('');
+ $('count').textContent=S.lsts.length+' propert'+(S.lsts.length===1?'y':'ies')+' · '+S.reqs.length+' client'+(S.reqs.length===1?'':'s');
+ ({find:vFind,imp:vImport,sav:vSaved})[view]()}
+
+/* ----- Find: the questionnaire ----- */
+function vFind(){
+ if(sub==='results'&&S.reqs.find(r=>r.id===activeReq))return vResults();
+ sub='form';const bad=k=>ERR.includes(k)?' bad':'';
+ $('v').innerHTML=`<h1>${F.id?'Edit the request':'What is your client looking for?'}</h1><p class="lead">Answer the questions below and the matching properties are ranked for you.</p>
+ <div class="fld"><label for="f_name">Client name <i>(optional)</i></label><input id="f_name" autocomplete="name" value="${esc(F.name)}" oninput="F.name=this.value"></div>
+ <div class="fld"><label for="f_phone">Phone / WhatsApp <i>(optional)</i></label><input id="f_phone" type="tel" inputmode="tel" autocomplete="tel" value="${esc(F.phone)}" oninput="F.phone=this.value"></div>
+ <div class="fld${bad('tx')}"><span class="q" id="q_tx">Transaction category</span><div class="tog" role="group" aria-labelledby="q_tx"><button type="button" class="${F.tx==='rent'?'on':''}" aria-pressed="${F.tx==='rent'}" onclick="setTx('rent')">To rent</button><button type="button" class="${F.tx==='buy'?'on':''}" aria-pressed="${F.tx==='buy'}" onclick="setTx('buy')">To buy</button></div></div>
+ <div class="fld${bad('kind')}"><label for="f_kind">Property type<span class="sub">What type of property are you looking for?</span></label><select id="f_kind" onchange="F.kind=this.value;render()"><option value="">Choose a type</option>${KINDS.map(k=>`<option value="${k[0]}" ${F.kind===k[0]?'selected':''}>${k[1]}</option>`).join('')}</select>${F.kind==='other'?`<input class="pair" aria-label="Describe the property type" placeholder="Describe the type, for example warehouse or hotel" value="${esc(F.kindText)}" oninput="F.kindText=this.value">`:''}</div>
+ <div class="fld${bad('loc')}${bad('country')}"><span class="q">Preferred location</span>
+  <div class="pair"><label for="f_loc">What area(s) do you want it?</label><input id="f_loc" placeholder="For example Barnawa, Malali" value="${esc(F.loc)}" oninput="F.loc=this.value"></div>
+  <div class="pair"><label for="f_state">What state / region do you want it located?</label><input id="f_state" list="dl_state" placeholder="For example Kaduna" value="${esc(F.state)}" oninput="F.state=this.value"><datalist id="dl_state">${NG_STATES.map(s=>`<option value="${s}">`).join('')}</datalist></div>
+  <div class="pair"><label for="f_country">In what country do you want it?</label><input id="f_country" list="dl_country" value="${esc(F.country)}" oninput="F.country=this.value"><datalist id="dl_country">${COUNTRIES.map(s=>`<option value="${s}">`).join('')}</datalist></div></div>
+ <div class="fld${bad('budget')}"><span class="q">Budget</span>
+  <div class="row2 wide"><div><label class="sub" for="f_budget" style="margin:0 0 5px">What is your budget?</label><input id="f_budget" inputmode="numeric" placeholder="0" value="${fmtNum(F.budget)}" oninput="setBudget(this)" onblur="this.value=fmtNum(F.budget)"></div>
+  <div><label class="sub" for="f_cur" style="margin:0 0 5px">Select your currency</label><select id="f_cur" onchange="F.currency=this.value;prevBudget()">${CURR.map(c=>`<option value="${c}" ${F.currency===c?'selected':''}>${esc(curLabel(c))}</option>`).join('')}</select></div></div>
+  <p class="hint" id="bprev"></p></div>
+ <div class="fld"><label for="f_extra">Additional requirements<span class="sub">Tell me other details you want in the property that you have not mentioned.</span></label><textarea id="f_extra" placeholder="For example 3 bedrooms, borehole, gated estate, parking, C of O" oninput="F.extra=this.value">${esc(F.extra)}</textarea></div>
+ ${ERR.length?`<p class="err" role="alert">Still needed: ${ERR.map(k=>({tx:'to rent or to buy',kind:'property type',loc:'preferred area',country:'country',budget:'budget'}[k])).join(', ')}.</p>`:''}
+ <div class="acts"><button class="btn main block" onclick="submitForm()">Find matches</button></div>${F.id?'<div class="acts"><button class="btn block" onclick="newSearch()">Cancel and start a new search</button></div>':''}`;
+ prevBudget()}
+function setTx(t){F.tx=t;ERR=ERR.filter(x=>x!=='tx');render()}
+function setBudget(el){F.budget=el.value.replace(/\D/g,'');prevBudget()}
+function prevBudget(){const p=$('bprev');if(!p)return;p.textContent=F.budget?money(F.budget,F.currency)+(F.tx==='rent'?' per year':''):(F.tx==='rent'?'For a rental, enter the amount per year.':'')}
+function submitForm(){
+ ERR=[];if(!F.tx)ERR.push('tx');if(!F.kind)ERR.push('kind');if(!F.loc.trim())ERR.push('loc');if(!F.country.trim())ERR.push('country');if(!(+F.budget>0))ERR.push('budget');
+ if(ERR.length){render();return}
+ const r={id:F.id||uid(),name:F.name.trim(),phone:F.phone.trim(),tx:F.tx,kind:F.kind,kindText:F.kind==='other'?F.kindText.trim():'',loc:F.loc.trim(),state:F.state.trim(),country:F.country.trim(),budget:+F.budget,currency:F.currency,extra:F.extra.trim(),at:Date.now()};
+ const i=S.reqs.findIndex(x=>x.id===r.id);if(i>=0)S.reqs[i]=Object.assign(S.reqs[i],r);else S.reqs.unshift(r);
+ persist();activeReq=r.id;sub='results';minScore=0;F=blank();window.scrollTo(0,0);render()}
+function newSearch(){F=blank();ERR=[];sub='form';activeReq=null;window.scrollTo(0,0);render()}
+function editReq(id){const r=S.reqs.find(x=>x.id===id);if(!r)return;F=Object.assign(blank(),r,{budget:String(r.budget||'')});ERR=[];sub='form';view='find';window.scrollTo(0,0);render()}
+
+/* ----- Find: results ----- */
+function listingCard(l,x,wa){
+ const wl=waNum(l.phone,l.country),msg=encodeURIComponent('Hello, I am enquiring about the '+l.title+(l.loc?' in '+l.loc:'')+'.');
+ return `<article class="match"><div class="hd"><div><h3>${esc(l.title)}</h3><div class="where">${esc(placeTxt(l))}</div><div class="price">${esc(priceTxt(l))}</div></div><div class="score ${tier(x.total)}" aria-label="${x.total} percent match">${x.total}<small>%</small></div></div>${cells(x)}${why(x)}${l.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${wl}?text=${msg}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(l.phone)}">Call</a></div>`:''}</article>`}
+const cells=x=>`<div class="cells">${x.parts.map(p=>{const f=p.pts/25;return `<div class="cell ${f>=.85?'':f>0?'part':'none'}"><span class="bar"><i style="width:${Math.round(f*100)}%"></i></span><b>${p.short}</b><em>${p.pts}/25</em></div>`}).join('')}</div>`;
+const why=x=>`<details><summary>Why this score</summary><ul class="why">${x.parts.map(p=>`<li class="${p.pts>=21.25?'':p.pts>0?'p':'n'}"><b>${p.short}:</b> ${esc(p.n)}</li>`).join('')}</ul></details>`;
+function vResults(){
+ const r=S.reqs.find(x=>x.id===activeReq),{el,other}=matchesForReq(r),shown=el.filter(m=>m.x.total>=minScore),cat=normTx(r.tx)==='rent'?'rental':'sale';
+ $('v').innerHTML=`<div class="recap"><b>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</b><span>${esc(reqLine(r))}</span><span>${esc(placeTxt(r))}</span><span>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</span>${r.extra?`<span>${esc(r.extra.length>110?r.extra.slice(0,110)+'…':r.extra)}</span>`:''}<div class="acts"><button class="btn sm" onclick="editReq('${r.id}')">Edit answers</button><button class="btn sm" onclick="newSearch()">New search</button></div></div>
+ ${!S.lsts.length?`<div class="empty"><b>No properties saved yet</b>Import listings from WhatsApp messages, documents or screenshots, then come back.<br><button class="btn main" onclick="M.mode='lst';go('imp')">Import listings</button></div>`:`
+ <div class="chips" role="group" aria-label="Minimum match">${[[0,'All'],[50,'50%+'],[75,'75%+']].map(c=>`<button class="chip ${minScore===c[0]?'on':''}" onclick="minScore=${c[0]};render()">${c[1]}</button>`).join('')}</div>
+ <p class="note">${el.length} ${cat} listing${el.length===1?'':'s'} checked${other?`. ${other} listing${other===1?'':'s'} in the other category ${other===1?'was':'were'} left out, because a ${cat==='sale'?'rental':'sale'} property never matches a ${cat==='sale'?'buy':'rent'} request.`:'.'}</p>
+ ${shown.length?shown.map(m=>listingCard(m.l,m.x)).join(''):`<div class="empty"><b>${el.length?'Nothing at '+minScore+'% or higher':'No '+cat+' listings saved yet'}</b>${el.length?'Try a lower filter.':'Import some '+cat+' listings to see matches.'}</div>`}`}`}
+
+/* ----- Import ----- */
+const SRC=['WhatsApp','Facebook','Instagram','SMS','Referral','Other'];
+const LIBS={pdf:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',docx:'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.9.0/mammoth.browser.min.js',ocr:'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js'};
+const loaded={};
+function loadLib(k){return loaded[k]||(loaded[k]=new Promise((ok,no)=>{const s=document.createElement('script');s.src=LIBS[k];s.onload=()=>{if(k==='pdf')window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';ok()};s.onerror=()=>{delete loaded[k];no(new Error('Could not load the reader. Check your connection and try again.'))};document.head.appendChild(s)}))}
+function vImport(){
+ const m=M.mode,q=m!=='lst',D=M.draft;
+ $('v').innerHTML=`<h1>Import messages</h1><p class="lead">Add property listings and client requests from WhatsApp, Facebook, documents or screenshots.</p>
+ <div class="sw" role="group" aria-label="Import mode">${[['mixed','Mixed messages'],['req','Requests only'],['lst','Listings only']].map(x=>`<button class="${m===x[0]?'on':''}" aria-pressed="${m===x[0]}" onclick="M.mode='${x[0]}';M.draft=null;M.msg='';render()">${x[1]}</button>`).join('')}</div>
+ <p class="note">${m==='mixed'?'Paste a mix of property adverts and client requests. Each message is sorted into a listing or a request.':m==='req'?'Everything you import here is treated as a client request.':'Everything you import here is treated as a property listing.'}</p>
+ <label class="q" for="mt">Paste messages <i>(leave a blank line between messages)</i></label><textarea id="mt" rows="7" oninput="M.text=this.value">${esc(M.text)}</textarea>
+ ${q?`<div class="pair"><label class="q" for="msrc">Where did they come from?</label><select id="msrc" onchange="M.src=this.value">${SRC.map(s=>`<option ${M.src===s?'selected':''}>${s}</option>`).join('')}</select></div>`:''}
+ <div class="pair"><label class="q" for="mf">Or add files</label><input id="mf" type="file" multiple accept=".txt,.csv,.pdf,.docx,.jpg,.jpeg,.png,.webp,.bmp,.gif,image/*,text/plain,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="readFiles(this)"><p class="hint" id="istat">TXT, CSV, PDF, Word (.docx), and screenshots or photos (JPG, PNG, WEBP, BMP, GIF). Text in images is read with OCR, so check it before you save.</p></div>
+ ${M.msg?`<p class="ok" role="status">${esc(M.msg)}</p>`:''}
+ <div class="acts"><button class="btn main block" onclick="analyse()">Analyse and sort</button></div>
+ ${D?draftsUI():''}`}
+async function readFiles(inp){
+ const files=Array.from(inp.files||[]);if(!files.length)return;const st=$('istat'),out=[];
+ const buf=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(new Error('Could not read the file'));r.readAsArrayBuffer(f)});
+ const txt=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result||''));r.onerror=()=>no(new Error('Could not read the file'));r.readAsText(f)});
+ for(const f of files){
+  const ext=(f.name.split('.').pop()||'').toLowerCase();let text='';
+  try{
+   if(ext==='txt'||ext==='csv')text=await txt(f);
+   else if(ext==='pdf'){st.textContent='Reading '+f.name+'…';await loadLib('pdf');const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await buf(f))}).promise,pg=[];for(let p=1;p<=pdf.numPages;p++){const c=await(await pdf.getPage(p)).getTextContent();pg.push(c.items.map(x=>x.str).join(' '))}text=pg.join('\n\n')}
+   else if(ext==='docx'){st.textContent='Reading '+f.name+'…';await loadLib('docx');text=(await mammoth.extractRawText({arrayBuffer:await buf(f)})).value||''}
+   else if(['jpg','jpeg','png','webp','bmp','gif'].includes(ext)||(f.type||'').startsWith('image/')){st.textContent='Loading the text reader…';await loadLib('ocr');const res=await Tesseract.recognize(f,'eng',{logger:x=>{if(x.status==='recognizing text')st.textContent='Reading '+f.name+' '+Math.round((x.progress||0)*100)+'%'}});text=(res.data&&res.data.text)||'';if(!text.trim())throw new Error('No readable text found. Try a clearer or larger screenshot.')}
+   else if(ext==='doc')throw new Error('Old .doc files are not supported. Save it as .docx and add it again.');
+   else throw new Error('This file type is not supported.');
+   if(!text.trim())throw new Error('No selectable text found. A scanned PDF needs to be added as images instead.');
+   out.push(text.trim());
+  }catch(e){out.push('[Not imported: '+f.name+' – '+e.message+']')}
+ }
+ M.text=(M.text.trim()?M.text.trim()+'\n\n':'')+out.join('\n\n');M.msg='';render()}
+function waSplit(text){
+ const re=/(?:^|\n)(\d{1,2}\/\d{1,2}\/\d{2,4}),?\s+\d{1,2}:\d{2}\s*(?:[AP]M)?\s+-\s+[^:\n]+:\s*/gi,ms=[...text.matchAll(re)];if(ms.length<2)return null;
+ return ms.map((m,i)=>m[0].replace(/^\n/,'')+text.slice(m.index+m[0].length,ms[i+1]?ms[i+1].index:text.length).trim())}
+function waMeta(b){const m=/^\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}\s*(?:[AP]M)?\s+-\s+([^:]+):\s*([\s\S]*)$/i.exec(b.trim());if(!m)return{body:b,poster:'',phone:''};const s=m[1].trim();return{body:m[2],poster:/^\+?[\d\s-]{9,}$/.test(s)?'':s,phone:/^\+?[\d\s-]{9,}$/.test(s)?s.replace(/[\s-]/g,''):''}}
+function mkDraft(cls,body,meta){const d=cls==='listing'?pLst(body,S.lsts.map(l=>l.loc)):pReq(body);d.cls=cls;d.raw=body;d.ok=true;d.src=M.src;if(meta.phone&&!d.phone)d.phone=meta.phone;if(cls!=='listing'&&meta.poster&&!d.name)d.name=meta.poster;d.meta=meta;return d}
+function analyse(){
+ const blocks=((M.src==='WhatsApp'&&M.mode!=='lst'&&waSplit(M.text))||M.text.split(/\n\s*\n|\n-{3,}\n/)).map(s=>s.trim()).filter(s=>s.length>12);
+ if(!blocks.length){M.msg='Paste a message or add a file first.';M.draft=null;render();return}
+ M.msg='';M.draft=blocks.map(b=>{const meta=waMeta(b),cls=M.mode==='mixed'?classifyMixed(meta.body):M.mode==='req'?'request':'listing';return mkDraft(cls,meta.body,meta)});render()}
+function setCls(i,v){const d=M.draft[i];M.draft[i]=Object.assign(mkDraft(v,d.raw,d.meta),{ok:d.ok});render()}
+const opt=(v,cur,lab)=>`<option value="${esc(v)}" ${v===cur?'selected':''}>${esc(lab)}</option>`;
+function draftsUI(){
+ const D=M.draft;
+ return `<h2>Review before saving</h2>`+D.map((d,i)=>{
+  const q=d.cls==='request',rev=d.cls==='review';
+  let h=`<div class="draft"><label class="src" style="font-size:13.5px;color:var(--mut);font-weight:400"><input type="checkbox" ${d.ok?'checked':''} onchange="M.draft[${i}].ok=this.checked"><span>${esc(d.raw.slice(0,170))}${d.raw.length>170?'…':''}</span></label>`;
+  if(M.mode==='mixed')h+=`<div class="grid"><div class="full"><label>Sorted as (change if wrong)</label><select onchange="setCls(${i},this.value)">${opt('listing',d.cls,'Property listing')}${opt('request',d.cls,'Client request')}${opt('review',d.cls,'Needs review')}</select></div></div>`;
+  if(rev)return h+'<p class="note">This message could not be sorted with confidence. Choose listing or request above.</p></div>';
+  h+=`<div class="grid"><div class="full"><label>Transaction category${d.needTx?' (choose one to save)':''}</label><select onchange="M.draft[${i}].tx=this.value">${opt('',d.tx,'Choose…')}${opt('rent',d.tx,'To rent / For rent / To let')}${opt('buy',d.tx,'To buy / For sale')}</select></div>`;
+  if(q)h+=`<div><label>Client name</label><input value="${esc(d.name)}" oninput="M.draft[${i}].name=this.value"></div><div><label>Phone / WhatsApp</label><input value="${esc(d.phone)}" oninput="M.draft[${i}].phone=this.value"></div>`;
+  else h+=`<div class="full"><label>Title</label><input value="${esc(d.title)}" oninput="M.draft[${i}].title=this.value"></div>`;
+  h+=`<div><label>Property type</label><select onchange="M.draft[${i}].kind=this.value">${opt('',d.kind,'Not stated')}${KINDS.filter(k=>k[0]!=='other').map(k=>opt(k[0],d.kind,k[1])).join('')}</select></div>
+   <div><label>Area(s)</label><input value="${esc(d.loc)}" oninput="M.draft[${i}].loc=this.value"></div>
+   <div><label>State / region</label><input value="${esc(d.state)}" oninput="M.draft[${i}].state=this.value"></div>
+   <div><label>Country</label><input value="${esc(d.country)}" oninput="M.draft[${i}].country=this.value"></div>
+   <div><label>${q?'Budget':'Price'}</label><input inputmode="numeric" value="${esc(q?d.budget:d.price)}" oninput="M.draft[${i}].${q?'budget':'price'}=+this.value.replace(/\\D/g,'')||''"></div>
+   <div><label>Currency</label><select onchange="M.draft[${i}].currency=this.value">${CURR.map(c=>opt(c,d.currency,c)).join('')}</select></div>`;
+  if(!q)h+=`<div><label>Price is per</label><select onchange="M.draft[${i}].per=this.value">${opt('year',d.per,'Year')}${opt('month',d.per,'Month')}</select></div><div><label>Contact phone</label><input value="${esc(d.phone)}" oninput="M.draft[${i}].phone=this.value"></div>`;
+  return h+(d.needPrice?'<p class="err full">Add a price to save this listing.</p>':'')+'</div></div>'}).join('')+
+ `<div class="acts"><button class="btn main block" onclick="saveDrafts()">Save selected</button></div>`}
+function saveDrafts(){
+ let rq=0,ls=0,dup=0,hold=0;const keep=[];
+ M.draft.forEach(d=>{
+  if(!d.ok||d.cls==='review'){if(d.ok)hold++;keep.push(d);return}
+  d.needTx=false;d.needPrice=false;
+  if(!normTx(d.tx)){d.needTx=true;hold++;keep.push(d);return}
+  if(d.cls==='request'){
+   if(S.reqs.some(r=>r.raw&&r.raw===d.raw&&(r.phone||'')===(d.phone||''))){dup++;return}
+   S.reqs.unshift({id:uid(),name:d.name,phone:d.phone,tx:d.tx,kind:d.kind||'',kindText:'',loc:d.loc,state:d.state,country:d.country||'Nigeria',budget:+d.budget||'',currency:d.currency||'NGN',extra:d.extra,raw:d.raw,at:Date.now()});rq++}
+  else{
+   if(!(+d.price>0)){d.needPrice=true;hold++;keep.push(d);return}
+   if(S.lsts.some(l=>l.desc===d.desc&&(l.phone||'')===(d.phone||''))){dup++;return}
+   S.lsts.unshift({id:uid(),tx:d.tx,kind:d.kind||'',title:d.title||'Property',loc:d.loc,state:d.state,country:d.country||'Nigeria',currency:d.currency||'NGN',price:+d.price,per:d.per||'year',beds:d.beds||'',phone:d.phone,desc:d.desc,at:Date.now()});ls++}
+ });
+ persist();M.draft=keep.length?keep:null;if(!keep.length)M.text='';
+ const n=[];if(rq)n.push(rq+' request'+(rq>1?'s':'')+' saved');if(ls)n.push(ls+' listing'+(ls>1?'s':'')+' saved');if(dup)n.push(dup+' already saved');if(hold)n.push(hold+' still need a category or price');
+ M.msg=n.join('. ')+(n.length?'.':'Nothing was selected to save.');render()}
+
+/* ----- Saved ----- */
+function vSaved(){
+ const t=savedTab;
+ $('v').innerHTML=`<h1>Saved</h1><div class="sw two" role="group" aria-label="Saved items"><button class="${t==='req'?'on':''}" onclick="savedTab='req';activeLst=null;render()">Clients (${S.reqs.length})</button><button class="${t==='lst'?'on':''}" onclick="savedTab='lst';render()">Properties (${S.lsts.length})</button></div>`+
+ (t==='req'?(S.reqs.length?S.reqs.map(r=>`<div class="item"><h3>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</h3><p><span class="tag ${normTx(r.tx)==='rent'?'rent':''}">${esc(txLabel(normTx(r.tx)))}</span>${esc(r.kind==='other'?r.kindText:kl(r.kind))} · ${esc(placeTxt(r))}</p><p>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</p><div class="acts"><button class="btn sm main" onclick="activeReq='${r.id}';sub='results';minScore=0;go('find')">See matches</button><button class="btn sm" onclick="editReq('${r.id}')">Edit</button><button class="btn sm danger" onclick="del('req','${r.id}')">Delete</button></div></div>`).join(''):`<div class="empty"><b>No clients yet</b>Answer the questions on the Find tab or import client requests.<br><button class="btn main" onclick="newSearch();go('find')">Start a search</button></div>`)
+ :(S.lsts.length?S.lsts.map(l=>{const open=activeLst===l.id,ms=open?matchesForLst(l):[];return `<div class="item"><h3>${esc(l.title)}</h3><p><span class="tag ${normTx(l.tx)==='rent'?'rent':''}">${normTx(l.tx)==='rent'?'For rent':'For sale'}</span>${esc(placeTxt(l))}</p><p>${esc(priceTxt(l))}</p><div class="acts"><button class="btn sm main" onclick="activeLst=${open?'null':`'${l.id}'`};render()">${open?'Hide':'Matching clients'}</button><button class="btn sm danger" onclick="del('lst','${l.id}')">Delete</button></div>${open?(ms.length?ms.map(m=>`<div class="match" style="margin:10px 0 0"><div class="hd"><div><h3>${esc(m.r.name||'Client')}${m.r.phone?' · '+esc(m.r.phone):''}</h3><div class="where">${esc(reqLine(m.r))} · ${esc(placeTxt(m.r))}</div><div class="price">Budget ${esc(money(m.r.budget,m.r.currency))}</div></div><div class="score ${tier(m.x.total)}">${m.x.total}<small>%</small></div></div>${cells(m.x)}${why(m.x)}${m.r.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${waNum(m.r.phone,m.r.country)}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(m.r.phone)}">Call</a></div>`:''}</div>`).join(''):`<p class="note">No saved ${normTx(l.tx)==='rent'?'rental':'purchase'} requests to compare with yet.</p>`):''}</div>`}).join(''):`<div class="empty"><b>No properties yet</b>Import listings from messages, documents or screenshots.<br><button class="btn main" onclick="M.mode='lst';go('imp')">Import listings</button></div>`))+
+ `<h2>Backup</h2><div class="acts"><button class="btn sm" onclick="exportData()">Export backup</button><label class="btn sm" for="bk" style="margin:0">Restore backup</label><input id="bk" type="file" accept=".json,application/json" hidden onchange="importData(this)"></div><p class="note">Everything is stored on this device only. Export a backup before clearing your browser data.</p>`}
+function del(k,id){if(!confirm('Delete this '+(k==='req'?'client':'property')+'?'))return;if(k==='req'){S.reqs=S.reqs.filter(r=>r.id!==id);if(activeReq===id){activeReq=null;sub='form'}}else{S.lsts=S.lsts.filter(l=>l.id!==id)}persist();render()}
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='property-matchmaker-backup.json';a.click()}
+function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.reqs)&&!Array.isArray(d.lsts))throw 0;S={reqs:d.reqs||[],lsts:d.lsts||[]};persist();render()}catch(e){alert('That file is not a Property Matchmaker backup.')}};r.readAsText(f)}
+
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();
+</script></body></html>
