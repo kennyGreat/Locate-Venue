@@ -97,15 +97,52 @@ summary{cursor:pointer;font-size:14px;font-weight:650;color:var(--ac);min-height
 .item h3{margin:0;font-size:16px;letter-spacing:-.15px}
 .item p{margin:3px 0 0;font-size:14px;color:var(--mut)}
 nav.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
-nav.bar div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav.bar div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
 nav.bar button{border:0;background:none;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12.5px;font-weight:650;color:var(--mut);cursor:pointer}
 nav.bar button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav.bar button.on{color:var(--ac)}
+nav.bar button{position:relative;font-size:10.5px;padding:0 1px}
+.bdg{position:absolute;top:6px;left:calc(50% + 6px);min-width:17px;height:17px;border-radius:9px;background:var(--brick);color:#fff;font-style:normal;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+header.top .hr{display:flex;align-items:center;gap:10px}
+.gear{border:0;background:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);margin-right:-8px}
+.gear svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sync{font-size:12px;font-weight:650;white-space:nowrap}.sync.s-ok{color:var(--ac)}.sync.s-off{color:var(--amb)}.sync.s-busy{color:var(--mut)}
+header.top b{white-space:nowrap}
+@media (max-width:430px){#count{display:none}}
+.code{display:block;word-break:break-all;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;font:13.5px/1.4 ui-monospace,Menlo,Consolas,monospace;user-select:all}
+.mrow{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:10px}
+.mrow label{display:block;font-size:12.5px;font-weight:650;color:var(--mut)}
+.mrow select,.mrow input{min-height:44px;font-size:15px;margin-top:3px}
+.match.dim{opacity:.78;background:#f6f8f7}
+.mstrip{display:flex;gap:6px;margin:10px 0 2px;overflow-x:auto}
+.mth{position:relative;flex:none;width:76px;height:76px;border:0;padding:0;border-radius:10px;overflow:hidden;background:#dfe6e3;cursor:pointer}
+.mth.on{outline:3px solid var(--ac)}
+.mimg{width:100%;height:100%;object-fit:cover;display:block}
+.play,.more{position:absolute;font-style:normal;color:#fff;font-weight:700;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.play{left:6px;bottom:4px}.more{right:6px;bottom:4px;background:rgba(0,0,0,.55);border-radius:6px;padding:1px 6px}
+#sheet .scrim{position:fixed;inset:0;background:rgba(10,20,25,.55);z-index:30}
+#sheet .sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;max-height:92vh;display:flex;flex-direction:column;background:var(--bg);border-radius:18px 18px 0 0;z-index:31;padding-bottom:env(safe-area-inset-bottom,0px)}
+.shead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.shead b{font-size:16px;line-height:1.25}
+.sbody{overflow:auto;padding:14px 16px 20px}
+.mview{background:#0c1519;border-radius:12px;overflow:hidden;margin-bottom:10px}
+.mview img,.mview video{display:block;width:100%;max-height:52vh;object-fit:contain}
+.mrail{display:flex;gap:6px;overflow-x:auto;margin:10px 0}
+.linkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chk{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:15px}.chk input{width:22px;min-height:22px}
+.clip{word-break:break-all}
+.btn[disabled]{opacity:.45;cursor:default}
+.alt .sent{font-size:16px;line-height:1.4;font-weight:650;margin:4px 0 0}
+.rank{display:inline-block;font-size:12px;font-weight:800;color:var(--mut);letter-spacing:.3px}
+.altd{margin:12px 0 4px}.altd>summary{font-size:15px}
+h2+.note{margin-top:0}
+.grp{margin:18px 0 6px}
+input[type=search]{margin:4px 0 8px}
 @media (min-width:700px){.app{padding-top:10px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style></head><body>
 <div class="app">
- <header class="top"><b>Property Matchmaker</b><span id="count"></span></header>
+ <header class="top"><b>Property Matchmaker</b><div class="hr"><span id="sync" class="sync" role="status"></span><span id="count"></span><button class="gear" onclick="go('search')" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button><button class="gear" onclick="go('set')" aria-label="Settings and sync"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button></div></header>
  <main id="v"></main>
 </div>
 <nav class="bar" aria-label="Main"><div id="nav"></div></nav>
@@ -181,14 +218,14 @@ const bedList=t=>{const o=[];String(t||'').replace(/\b(\d{1,2}|one|two|three|fou
 function factsOf(l){const t=[l.title,l.desc].filter(Boolean).join(' ');return{beds:l.kind==='block'?(Math.max(0,...bedList(t))||+l.beds||0):(+l.beds||bedsOf(t)),bedsMin:l.kind==='block'?(Math.min(...bedList(t),99)%99||+l.beds||0):0,units:unitsOf(l.desc)||unitsOf(l.title),baths:+l.baths||bathsOf(t),toilets:toiletsOf(t),parking:parkingOf(t),furnish:furnishOf(t),size:sizeOf(t),raw:t.toLowerCase()}}
 function reqsOf(text,r){
  const t=String(text||''),z=t.toLowerCase(),out=[];let rest=z;
- const blk=!!(r&&r.kind==='block'),each=blk&&/\b(?:each|every|all|per flat|per unit)\b/.test(z);const b=bedsOf(t);if(b)out.push({label:b+'+ bedrooms'+(each?' in every flat':blk?' per flat':''),ok:f=>(each?f.bedsMin:f.beds)>=b});
- const un=blk?unitsOf(t):0;if(un)out.push({label:un+'+ flats in the block',ok:f=>f.units>=un});
- const ba=bathsOf(t);if(ba)out.push({label:ba+'+ bathrooms',ok:f=>f.baths>=ba});
- const to=toiletsOf(t);if(to)out.push({label:to+'+ toilets',ok:f=>f.toilets>=to});
+ const blk=!!(r&&r.kind==='block'),each=blk&&/\b(?:each|every|all|per flat|per unit)\b/.test(z);const b=bedsOf(t);if(b)out.push({label:b+'+ bedrooms'+(each?' in every flat':blk?' per flat':''),ok:f=>(each?f.bedsMin:f.beds)>=b,cat:'spec',want:b,get:f=>each?f.bedsMin:f.beds});
+ const un=blk?unitsOf(t):0;if(un)out.push({label:un+'+ flats in the block',ok:f=>f.units>=un,cat:'spec'});
+ const ba=bathsOf(t);if(ba)out.push({label:ba+'+ bathrooms',ok:f=>f.baths>=ba,cat:'spec'});
+ const to=toiletsOf(t);if(to)out.push({label:to+'+ toilets',ok:f=>f.toilets>=to,cat:'spec'});
  const pk=parkingOf(t);if(pk)out.push({label:pk+'+ parking spaces',ok:f=>f.parking>=pk});
  else if(/\bparking\b|\bgarage\b/.test(z))out.push({label:'parking',ok:f=>f.parking>0||/parking|garage/.test(f.raw)});
  const fu=furnishOf(t);if(fu){const lab={un:'unfurnished',semi:'semi-furnished',full:'fully furnished',any:'furnished'}[fu];out.push({label:lab,ok:f=>fu==='any'?['semi','full','any'].includes(f.furnish):fu==='semi'?['semi','full'].includes(f.furnish):f.furnish===fu})}
- const sz=sizeOf(t);if(sz)out.push({label:'at least '+sz.n+' '+sz.u+(sz.u==='plot'&&sz.n!==1?'s':''),ok:f=>!!f.size&&f.size.u===sz.u&&f.size.n>=sz.n});
+ const sz=sizeOf(t);if(sz)out.push({label:'at least '+sz.n+' '+sz.u+(sz.u==='plot'&&sz.n!==1?'s':''),ok:f=>!!f.size&&f.size.u===sz.u&&f.size.n>=sz.n,cat:'spec'});
  FEAT.forEach(([label,re])=>{if(re.test(z)){out.push({label,ok:f=>re.test(f.raw)});rest=rest.replace(new RegExp(re.source,'g'),' ')}});
  Object.values(RX).forEach(re=>{rest=rest.replace(re,' ')});
  const skip=new Set(norm([r&&r.loc,r&&r.state,r&&r.country,r&&r.kindText,r&&r.kind].join(' ')).split(' '));
@@ -237,6 +274,55 @@ function sc(l,r){
   const n=!q.need.length?(r.extra&&r.extra.trim()?'No checkable requirements in the extra details':'No additional requirements'):miss.length?'Not found: '+miss.join(', ')+(met.length?'. Found: '+met.join(', '):''):'All met: '+met.join(', ');
   checks.push({k:'Extra requirements',ok:!miss.length,n})}
  return{ok:checks.every(c=>c.ok),checks,todo}}
+
+/* Second layer: close alternatives, ranked. Not exact matches. Same category and country only.
+   Priority order: location (area 30, state 10, country 5), then property type and requirements
+   (type 14, bedrooms and other specs 10, features 11), then budget (20). */
+const ALT={reach:'state',min:30,keep:5,show:10};
+const titleCase=s=>String(s||'').toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+const FAMS={duplex:'h',bungalow:'h',terrace:'h',flat:'f','self-contain':'f',block:'f'};
+const kname=k=>({flat:'flat','self-contain':'self-contain',commercial:'commercial property',land:'plot of land',block:'block of flats'}[k]||k||'property');
+function rankAlt(l,r){
+ const lt=normTx(l.tx),rt=normTx(r.tx);if(!lt||lt!==rt)return null;
+ if(!r.country||!l.country||nrm(r.country)!==nrm(l.country))return null;
+ const parts=[],diffs=[];
+ // Location
+ const ltext=[l.loc,l.state].join(' ')+(String(l.loc||'').trim()?'':' '+(l.desc||'')),areas=String(r.loc||'').split(/[,;/]|\band\b/i).map(s=>s.trim()).filter(Boolean);
+ const hit=areas.find(a=>hasPhrase(ltext,a)),lState=stN(l.state)||stN(stateOfArea(l.loc)),rState=stN(r.state)||stN(stateOfArea(r.loc));
+ const stateOk=rState?(lState?lState===rState:!!hit):!!hit;
+ if(!hit&&!stateOk&&ALT.reach!=='country')return null; // too far from what was asked (widen in Settings)
+ parts.push({k:'Area',pts:hit?30:0,max:30,n:hit?'In '+titleCase(hit):'Not in '+(areas.map(titleCase).join(' or ')||'the area asked')+(l.loc?' (this is '+l.loc+')':'')});
+ parts.push({k:'State',pts:stateOk?10:0,max:10,n:stateOk?'Same state'+(lState&&!l.state?' (worked out from the area)':''):'Different state'});
+ parts.push({k:'Country',pts:5,max:5,n:'Same country'});
+ if(!stateOk)diffs.push('Different state: '+(l.state||stateOfArea(l.loc)||'another state')+' instead of '+(r.state||stateOfArea(r.loc)||'the state asked'));
+ if(!hit)diffs.push('Different area: you asked for '+(areas.map(titleCase).join(' or ')||'a particular area')+', this is in '+(l.loc||'another area'));
+ // Property type
+ const rk=r.kind==='other'?(kindOf(r.kindText)||'other'):r.kind,lk=l.kind||kindOf((l.title||'')+' '+(l.desc||''));let tp=0;
+ if(rk&&lk){if(rk===lk)tp=14;else if(FAMS[rk]&&FAMS[rk]===FAMS[lk])tp=(rk==='flat'&&lk==='self-contain')||(rk==='self-contain'&&lk==='flat')?6:FAMS[rk]==='h'?8:4}
+ parts.push({k:'Property type',pts:tp,max:14,n:!rk?'No type asked':!lk?'Type not stated':rk===lk?'Same type: '+kname(lk):'Wanted '+kname(rk)+', this is '+kname(lk)});
+ if(rk&&tp<14)diffs.push(!lk?'The listing does not state its property type':'Wanted '+kname(rk)+', this is '+kname(lk));
+ // Bedrooms and other specs, then features
+ const need=reqsOf(r.extra,r).need,fa=factsOf(l),specs=need.filter(x=>x.cat==='spec'),feats=need.filter(x=>x.cat!=='spec');
+ const credit=x=>{if(x.ok(fa))return 1;if(x.want&&x.get){const g=x.get(fa);if(g>0)return Math.max(0,.5*g/x.want)}return 0};
+ const sp=specs.length?specs.reduce((a,x)=>a+credit(x),0)/specs.length:1,fe=feats.length?feats.filter(x=>x.ok(fa)).length/feats.length:1;
+ const met=need.filter(x=>x.ok(fa)).map(x=>x.label),miss=need.filter(x=>!x.ok(fa)).map(x=>x.label);
+ parts.push({k:'Bedrooms and specs',pts:10*sp,max:10,n:specs.length?specs.filter(x=>x.ok(fa)).length+' of '+specs.length+' met':'None asked'});
+ parts.push({k:'Features',pts:11*fe,max:11,n:feats.length?feats.filter(x=>x.ok(fa)).length+' of '+feats.length+' found':'None asked'});
+ if(miss.length)diffs.push('Not found: '+miss.join(', '));
+ // Budget
+ const price=+l.price||0,bud=+r.budget||0;let bp=0;
+ if(!bud||!price)diffs.push(!price?'The listing has no price':'No budget was given');
+ else if((r.currency||'NGN')!==(l.currency||'NGN'))diffs.push('Currency differs: budget in '+(r.currency||'NGN')+', listing in '+(l.currency||'NGN'));
+ else{const ask=lt==='rent'&&l.per==='month'?price*12:price,ratio=ask/bud;bp=ratio<=1?20:ratio<=1.1?14:ratio<=1.25?8:ratio<=1.5?3:0;if(ratio>1)diffs.push('About '+Math.round((ratio-1)*100)+'% over budget ('+money(ask,l.currency)+(lt==='rent'?' a year':'')+' against '+money(bud,r.currency)+')')}
+ parts.push({k:'Budget',pts:bp,max:20,n:bp===20?'Within budget':bp?'Over budget':'Well over budget or not comparable'});
+ parts.forEach(p=>p.pts=Math.round(p.pts*10)/10);
+ const score=Math.round(parts.reduce((a,p)=>a+p.pts,0));
+ // The sentence: what it is, where, the price, and only the requirements it meets
+ const per=lt==='rent'?(l.per==='month'?' a month':' a year'):'',beds=fa.beds,u=fa.units;
+ const what=lk==='block'?'Block of '+(u?u+' ':'')+'flats':(beds&&lk!=='land'&&lk!=='commercial'?beds+'-bedroom ':'')+kname(lk||rk);
+ const where=[l.loc,l.state&&nrm(l.state)!==nrm(l.loc)?l.state:''].filter(Boolean).join(', ')||'the area';
+ const sentence=what.charAt(0).toUpperCase()+what.slice(1)+' available in '+where+(price?', for '+money(price,l.currency)+per:'')+(bud?' (your budget: '+money(bud,r.currency)+(lt==='rent'?' a year':'')+')':'')+(met.length?', with '+met.join(', '):need.length?', but none of your additional requirements matched':'')+'.';
+ return{score,parts,sentence,met,diffs}}
 
 /* Import parsing: sorts messages and pulls out every field the matcher needs */
 const GEO={Kaduna:'barnawa|malali|ungwan rimi|ungwan sarki|ungwan pama|angwan pama|ungwan romi|ungwan boro|ungwan television|kakuri|sabon tasha|kamazou|mahuta|narayi|rigasa|romi|television|gonin gora|tudun wada|tudun nupawa|kawo|kabala doki|kabala west|kabala costain|hayin banki|badarawa|millennium city|kudenda|chikun|kurmin mashi|kurmin gwari|trikania|barnawa complex',
@@ -416,9 +502,435 @@ function analyseText(text,o){
  return drafts}
 /*END CORE*/
 
+/* ---------- Supabase sync ----------
+   No login: each browser gets a private workspace code. The database tables are closed to direct access;
+   the app reads and writes only through functions that need that code. Changes are saved here first,
+   then sent to Supabase, and anything that could not be sent waits in a queue and is retried. */
+const SB={url:'https://syujpnyxuhjvscyltdeb.supabase.co',key:'sb_publishable_e4H9nnNMGqPiLnPix2U85w_aBI_oITK'};
+const UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const newCode=()=>(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let WS=lsGet('pm_workspace');if(!UUID_RE.test(WS||'')){WS=newCode();lsSet('pm_workspace',WS)}
+let OUT=[];try{OUT=JSON.parse(lsGet('pm_outbox')||'[]')}catch(e){}
+const SYNC={state:'idle',err:'',last:0};
+const saveOut=()=>lsSet('pm_outbox',JSON.stringify(OUT));
+async function rpc(fn,args){
+ const r=await fetch(SB.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json'},body:JSON.stringify(args)});
+ if(!r.ok){let m='';try{m=(await r.json()).message}catch(e){}throw Object.assign(new Error(m||('HTTP '+r.status)),{status:r.status})}
+ const t=await r.text();return t?JSON.parse(t):null}
+const iso=v=>v?new Date(+v).toISOString():null,msOf=s=>s?Date.parse(s)||0:0,numOr=v=>(v===''||v==null||isNaN(+v))?null:+v;
+const MAP={
+ requests:{key:'reqs',
+  to:r=>({id:r.id,name:r.name||'',phone:r.phone||'',tx:normTx(r.tx)||null,kind:r.kind||'',kind_text:r.kindText||'',loc:r.loc||'',state:r.state||'',country:r.country||'',budget:numOr(r.budget),currency:r.currency||'',extra:r.extra||'',raw:r.raw||'',src:r.src||'',as_of:iso(r.asOf),as_of_src:r.asOfSrc||'',matched_at:iso(r.matchedAt),created_at:iso(r.at)}),
+  from:x=>({id:x.id,name:x.name||'',phone:x.phone||'',tx:x.tx||'',kind:x.kind||'',kindText:x.kind_text||'',loc:x.loc||'',state:x.state||'',country:x.country||'',budget:x.budget==null?'':+x.budget,currency:x.currency||'NGN',extra:x.extra||'',raw:x.raw||'',src:x.src||'',asOf:msOf(x.as_of),asOfSrc:x.as_of_src||'',matchedAt:msOf(x.matched_at),at:msOf(x.created_at)})},
+ listings:{key:'lsts',
+  to:l=>({id:l.id,title:l.title||'',tx:normTx(l.tx)||null,kind:l.kind||'',loc:l.loc||'',state:l.state||'',country:l.country||'',price:numOr(l.price),currency:l.currency||'',per:l.per||'',beds:numOr(l.beds)==null?null:Math.round(+l.beds),phone:l.phone||'',contact:l.contact||'',details:l.desc||'',raw:l.raw||'',src:l.src||'',as_of:iso(l.asOf),as_of_src:l.asOfSrc||'',created_at:iso(l.at)}),
+  from:x=>({id:x.id,title:x.title||'',tx:x.tx||'',kind:x.kind||'',loc:x.loc||'',state:x.state||'',country:x.country||'',price:x.price==null?'':+x.price,currency:x.currency||'NGN',per:x.per||'year',beds:x.beds==null?'':x.beds,phone:x.phone||'',contact:x.contact||'',desc:x.details||'',raw:x.raw||'',src:x.src||'',asOf:msOf(x.as_of),asOfSrc:x.as_of_src||'',at:msOf(x.created_at)})},
+ matches:{key:'matches',
+  to:m=>({id:m.id,request_id:m.reqId,listing_id:m.lstId,checks:m.checks||[],todo:m.todo||[],status:m.status||'new',note:m.note||'',first_matched_at:iso(m.firstAt),last_matched_at:iso(m.lastAt),is_alt:!!m.alt,score:m.alt&&m.score!=null?Math.round(m.score):null,sentence:m.sentence||'',diffs:m.diffs||[]}),
+  from:x=>({id:x.id,reqId:x.request_id,lstId:x.listing_id,checks:x.checks||[],todo:x.todo||[],status:x.status||'new',note:x.note||'',firstAt:msOf(x.first_matched_at),lastAt:msOf(x.last_matched_at),alt:!!x.is_alt,score:x.score==null?null:x.score,sentence:x.sentence||'',diffs:x.diffs||[]})},
+ media:{key:'media',
+  to:m=>({id:m.id,owner_type:m.ownerType,owner_id:m.ownerId,path:m.path,kind:m.kind,name:m.name||'',size:m.size||null,duration:m.duration||null,created_at:iso(m.at)}),
+  from:x=>({id:x.id,ownerType:x.owner_type,ownerId:x.owner_id,path:x.path,kind:x.kind,name:x.name||'',size:x.size==null?0:+x.size,duration:x.duration==null?null:+x.duration,at:msOf(x.created_at)})},
+ sources:{key:'sources',
+  to:s=>({id:s.id,platform:s.platform||'',kind:s.kind||'',name:s.name||'',url:s.url||'',phone:s.phone||'',handle:s.handle||'',notes:s.notes||'',last_used:iso(s.lastUsed),created_at:iso(s.at)}),
+  from:x=>({id:x.id,platform:x.platform||'other',kind:x.kind||'other',name:x.name||'',url:x.url||'',phone:x.phone||'',handle:x.handle||'',notes:x.notes||'',lastUsed:msOf(x.last_used),at:msOf(x.created_at)})}};
+const emptySnap=()=>({reqs:{},lsts:{},matches:{},media:{},sources:{}}),emptyS=()=>({reqs:[],lsts:[],matches:[],media:[],sources:[]});
+let SNAP=emptySnap();
+function takeSnap(){SNAP={};Object.values(MAP).forEach(m=>{SNAP[m.key]={};(S[m.key]||[]).forEach(r=>{SNAP[m.key][r.id]=JSON.stringify(m.to(r))})})}
+function diffQueue(){ // find what changed since the last save and queue it for Supabase
+ Object.entries(MAP).forEach(([tbl,m])=>{const cur=S[m.key]||[],snap=SNAP[m.key]||(SNAP[m.key]={}),seen=new Set(),ch=[];
+  cur.forEach(r=>{seen.add(r.id);const row=m.to(r),j=JSON.stringify(row);if(snap[r.id]!==j){ch.push(row);snap[r.id]=j}});
+  const gone=Object.keys(snap).filter(id=>!seen.has(id));gone.forEach(id=>delete snap[id]);
+  for(let i=0;i<ch.length;i+=200)OUT.push({k:'save',t:tbl,rows:ch.slice(i,i+200)});
+  if(gone.length)OUT.push({k:'del',t:tbl,ids:gone})})}
+function setSync(state,err){SYNC.state=state;SYNC.err=err||'';if(state==='ok')SYNC.last=Date.now();paintSync()}
+function paintSync(){
+ const el=document.getElementById('sync');if(!el)return;
+ const n=OUT.reduce((a,o)=>a+(o.rows?o.rows.length:o.ids.length),0);
+ const txt=SYNC.state==='syncing'?'Saving…':SYNC.state==='offline'?'Offline'+(n?', '+n+' waiting':''):n?n+' waiting':SYNC.last?'Saved':'';
+ el.className='sync '+(SYNC.state==='offline'||n?'s-off':SYNC.state==='syncing'?'s-busy':'s-ok');el.textContent=txt?'● '+txt:''}
+let flushing=false;
+async function flush(){
+ if(flushing||!OUT.length){paintSync();return}
+ flushing=true;setSync('syncing');let failed=false;
+ while(OUT.length){
+  const op=OUT[0];
+  try{if(op.k==='save')await rpc('pm_save',{ws:WS,tbl:op.t,rows:op.rows});else await rpc('pm_delete',{ws:WS,tbl:op.t,ids:op.ids});OUT.shift();saveOut()}
+  catch(e){
+   if(e.status&&e.status>=400&&e.status<500&&![401,403,429].includes(e.status)){OUT.shift();saveOut();SYNC.err='Some changes could not be saved: '+e.message} // the server refused this change; do not block the rest
+   else{failed=true;setSync('offline',e.message);break}}}
+ flushing=false;if(!failed)setSync('ok',SYNC.err)}
+async function pull(){
+ try{
+  await flush();if(OUT.length)return;
+  setSync('syncing');const d=await rpc('pm_load',{ws:WS});
+  const has=d.requests.length+d.listings.length+d.matches.length+(d.media||[]).length+(d.sources||[]).length>0;
+  if(!has&&(S.reqs.length||S.lsts.length||S.matches.length||S.media.length||S.sources.length)){ // nothing saved online yet: upload what is on this device instead of dropping it
+   SNAP=emptySnap();diffQueue();saveOut();await flush()}
+  else{
+   S.reqs=d.requests.map(MAP.requests.from);S.lsts=d.listings.map(MAP.listings.from);S.matches=d.matches.map(MAP.matches.from);S.media=(d.media||[]).map(MAP.media.from);S.sources=(d.sources||[]).map(MAP.sources.from);drainFileDel();
+   takeSnap();fixKinds();diffQueue();saveOut();lsSet(KEY,JSON.stringify(S));await flush()}
+  if(!OUT.length)setSync('ok',SYNC.err);
+  const ae=document.activeElement;if(!ae||!/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))render()
+ }catch(e){setSync('offline',e.message)}}
+function persist(){lsSet(KEY,JSON.stringify(S));diffQueue();saveOut();flush()}
+
+/* ---------- Matches: saved results that can be rechecked ---------- */
+function runMatch(reqId){
+ const r=S.reqs.find(x=>x.id===reqId);if(!r)return{added:0,dropped:0,alts:0};
+ const {ok}=matchesForReq(r),now=Date.now(),keep=new Set(),row=lid=>S.matches.find(x=>x.reqId===r.id&&x.lstId===lid);let added=0,dropped=0,alts=0;
+ ok.forEach(m=>{keep.add(m.l.id);const w=row(m.l.id);
+  if(w){w.checks=m.x.checks;w.todo=m.x.todo||[];w.lastAt=now;if(w.alt){w.alt=false;w.score=null;w.sentence='';w.diffs=[];added++}if(w.status==='stale')w.status='new'}
+  else{S.matches.push({id:uid(),reqId:r.id,lstId:m.l.id,checks:m.x.checks,todo:m.x.todo||[],status:'new',note:'',firstAt:now,lastAt:now,alt:false,score:null,sentence:'',diffs:[]});added++}});
+ altList(r).slice(0,ALT.keep).forEach(a=>{if(keep.has(a.l.id))return;keep.add(a.l.id);const w=row(a.l.id),f={alt:true,score:a.rk.score,sentence:a.rk.sentence,diffs:a.rk.diffs,checks:[],todo:[],lastAt:now};
+  if(w){Object.assign(w,f);if(w.status==='stale')w.status='new'}else{S.matches.push(Object.assign({id:uid(),reqId:r.id,lstId:a.l.id,status:'new',note:'',firstAt:now},f));alts++}});
+ S.matches=S.matches.filter(x=>{if(x.reqId!==r.id||keep.has(x.lstId)||x.status==='dismissed')return true;if(x.status==='contacted'||x.status==='closed'){x.status='stale';return true}dropped++;return false});
+ r.matchedAt=now;return{added,dropped,alts}}
+function rematchAll(){let added=0,dropped=0,alts=0;S.reqs.forEach(r=>{const x=runMatch(r.id);added+=x.added;dropped+=x.dropped;alts+=x.alts});return{added,dropped,alts,reqs:S.reqs.length}}
+const matchMsg=x=>`Checked ${x.reqs} client${x.reqs===1?'':'s'} against ${S.lsts.length} propert${S.lsts.length===1?'y':'ies'}: ${x.added} new match${x.added===1?'':'es'}, ${x.alts} new close alternative${x.alts===1?'':'s'}, ${x.dropped} no longer ${x.dropped===1?'fits':'fit'}.`;
+const MT={st:'active',req:'',msg:''};
+const MST=[['new','New'],['contacted','Contacted'],['closed','Closed']];
+const mPass=m=>MT.st==='active'?['new','contacted','stale'].includes(m.status):m.status===MT.st;
+function setM(id,f,v){const m=S.matches.find(x=>x.id===id);if(!m)return;m[f]=v;persist();if(f==='status')render()}
+function delM(id){if(!confirm('Delete this match for good?'))return;S.matches=S.matches.filter(m=>m.id!==id);persist();render()}
+function doRematchAll(){MT.msg=matchMsg(rematchAll());persist();render()}
+function recheck(id){const x=runMatch(id);persist();MT.req=id;MT.st='active';MT.msg=`Checked again: ${x.added} new match${x.added===1?'':'es'}, ${x.alts} new close alternative${x.alts===1?'':'s'}, ${x.dropped} no longer ${x.dropped===1?'fits':'fit'}.`;go('mat')}
+function matchCard(m){
+ const l=S.lsts.find(x=>x.id===m.lstId),r=S.reqs.find(x=>x.id===m.reqId);if(!l||!r)return '';
+ const x={checks:m.checks||[],todo:m.todo||[]},wa=(p,c,t)=>`https://wa.me/${waNum(p,c)}?text=${encodeURIComponent(t)}`;
+ const toAgent=`Hello, I have a client for the ${l.title}${l.loc?' in '+l.loc:''}. Is it still available?`,toClient=`Hello${r.name?' '+r.name:''}, I have a property that fits what you asked for: ${l.title}${l.loc?' in '+l.loc:''}, ${priceTxt(l)}.`;
+ if(m.status==='dismissed')return `<article class="match dim"><div class="hd"><div><h3>${esc(l.title)}</h3><div class="where">${esc(placeTxt(l))}</div></div><span class="tag rent">Dismissed</span></div><div class="acts"><button class="btn sm" onclick="setM('${m.id}','status','new')">Restore</button><button class="btn sm danger" onclick="delM('${m.id}')">Delete for good</button></div></article>`;
+ return `<article class="match${m.alt?' alt':''}${m.status==='stale'?' dim':''}"><div class="hd"><div>${m.alt?`<p class="sent">${esc(m.sentence||l.title)}</p>`:`<h3>${esc(l.title)}</h3><div class="where">${esc(placeTxt(l))}</div><div class="price">${esc(priceTxt(l))}</div>`}${asOfLine(l,'Last available')}</div>${m.alt?`<div class="score ${altTier(m.score||0)}">${m.score||0}<small>%</small></div>`:`<span class="tag ${m.status==='stale'?'rent':''}">${m.status==='stale'?'No longer matches':'Matched'}</span>`}</div>
+ ${m.alt?((m.diffs&&m.diffs.length)?`<details><summary>Where it falls short (${m.diffs.length})</summary><ul class="why">${m.diffs.map(d=>`<li class="n">${esc(d)}</li>`).join('')}</ul></details>`:''):`<details><summary>Why it matched</summary>${checksUI(x)}${todoUI(x)}</details>`}
+ ${mediaStrip('listing',l.id)}
+ <div class="mrow"><label>Status<select onchange="setM('${m.id}','status',this.value)">${MST.map(s=>`<option value="${s[0]}" ${(m.status===s[0]||(m.status==='stale'&&s[0]==='contacted'))?'selected':''}>${s[1]}</option>`).join('')}</select></label><label>Note<input value="${esc(m.note||'')}" placeholder="Add a note" onchange="setM('${m.id}','note',this.value)"></label></div>
+ <div class="acts">${l.phone?`<a class="btn sm main" href="${wa(l.phone,l.country,toAgent)}" target="_blank" rel="noopener">WhatsApp agent</a>`:''}${r.phone?`<a class="btn sm" href="${wa(r.phone,r.country,toClient)}" target="_blank" rel="noopener">WhatsApp client</a>`:''}<button class="btn sm danger" onclick="setM('${m.id}','status','dismissed')">Dismiss</button></div></article>`}
+function vMatches(){
+ const all=S.matches.filter(m=>S.reqs.some(r=>r.id===m.reqId)&&S.lsts.some(l=>l.id===m.lstId));
+ const cnt=st=>all.filter(m=>st==='active'?['new','contacted','stale'].includes(m.status):m.status===st).length;
+ const last=Math.max(0,...S.reqs.map(r=>r.matchedAt||0)),one=MT.req&&S.reqs.find(r=>r.id===MT.req);
+ const reqs=S.reqs.filter(r=>!MT.req||r.id===MT.req);
+ const blocks=reqs.map(r=>{const rows=all.filter(m=>m.reqId===r.id&&mPass(m)&&!m.alt),altRows=all.filter(m=>m.reqId===r.id&&mPass(m)&&m.alt);if(!rows.length&&!altRows.length&&!one&&MT.st!=='active')return '';
+  return `<section class="grp"><div class="recap"><b>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</b><span>${esc(reqLine(r))} · ${esc(placeTxt(r))}</span><span>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</span><span>${r.matchedAt?'Last checked '+dateTxt(r.matchedAt):'Not checked yet'}</span><div class="acts"><button class="btn sm" onclick="recheck('${r.id}')">Rematch</button><button class="btn sm" onclick="editReq('${r.id}')">Edit request</button></div></div>${rows.length?rows.map(matchCard).join(''):`<p class="note">${MT.st==='active'?'No match yet. Add properties or press Rematch after importing new ones.':'Nothing here.'}</p>`}${altRows.length?`<details class="altd" open><summary>Close alternatives (${altRows.length})</summary><p class="note">Not exact matches. Ranked by location first, then property type and requirements, then budget.</p>${altRows.map(matchCard).join('')}</details>`:(MT.st==='active'?`<p class="note">No close alternatives saved yet. Press Rematch.</p>`:'')}</section>`}).join('');
+ $('v').innerHTML=`<h1>Matches</h1><p class="lead">Saved results for every client. Press Rematch after you add or change properties.</p>
+ <div class="acts"><button class="btn main" onclick="doRematchAll()">Rematch all</button>${one?`<button class="btn" onclick="MT.req='';render()">Show all clients</button>`:''}</div>
+ ${MT.msg?`<p class="ok" role="status">${esc(MT.msg)}</p>`:''}
+ <p class="note">${last?'Last checked '+dateTxt(last)+'.':'Not checked yet.'}</p>
+ <div class="chips" role="group" aria-label="Filter matches">${[['active','Active'],['new','New'],['contacted','Contacted'],['closed','Closed'],['dismissed','Dismissed']].map(c=>`<button class="chip ${MT.st===c[0]?'on':''}" onclick="MT.st='${c[0]}';MT.msg='';render()">${c[1]} (${cnt(c[0])})</button>`).join('')}</div>
+ ${S.reqs.length?blocks||`<div class="empty"><b>Nothing in this list</b>Try another filter.</div>`:`<div class="empty"><b>No clients yet</b>Answer the questions on the Find tab or import client requests.<br><button class="btn main" onclick="newSearch();go('find')">Start a search</button></div>`}`}
+
+/* ----- Second layer: close alternatives ----- */
+const altTier=n=>n>=75?'hi':n>=55?'mid':'lo';
+function altList(r){
+ const out=[];S.lsts.forEach(l=>{const x=sc(l,r);if(!x||x.ok)return;const rk=rankAlt(l,r);if(rk&&rk.score>=ALT.min)out.push({l,rk})});
+ out.sort((a,b)=>b.rk.score-a.rk.score||(+a.l.price||0)-(+b.l.price||0));return out.slice(0,ALT.show)}
+function altCard(l,rk,i){
+ const wl=waNum(l.phone,l.country),msg=encodeURIComponent('Hello, is the '+l.title+(l.loc?' in '+l.loc:'')+' still available?');
+ return `<article class="match alt"><div class="hd"><div><span class="rank">#${i}</span><p class="sent">${esc(rk.sentence)}</p>${asOfLine(l,'Last available')}</div><div class="score ${altTier(rk.score)}" aria-label="${rk.score} percent close">${rk.score}<small>%</small></div></div>
+ ${rk.diffs.length?`<details><summary>Where it falls short (${rk.diffs.length})</summary><ul class="why">${rk.diffs.map(d=>`<li class="n">${esc(d)}</li>`).join('')}</ul></details>`:''}
+ ${mediaStrip('listing',l.id)}
+ <details><summary>How it ranked</summary><ul class="why">${rk.parts.map(p=>`<li class="${p.pts>=p.max*.85?'':p.pts>0?'p':'n'}"><b>${p.k} (${p.pts}/${p.max}):</b> ${esc(p.n)}</li>`).join('')}</ul></details>
+ ${l.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${wl}?text=${msg}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(l.phone)}">Call</a></div>`:''}</article>`}
+function altHTML(r,compact){
+ if(!S.lsts.length)return '';
+ const L=altList(r);
+ if(!L.length)return compact?'':`<h2>Close alternatives</h2><p class="note">No close alternatives in the same area or state yet.</p>`;
+ const cards=L.map((a,i)=>altCard(a.l,a.rk,i+1)).join('');
+ return compact?`<details class="altd"><summary>Close alternatives (${L.length})</summary><p class="note">Not exact matches. Ranked by location first, then property type and requirements, then budget.</p>${cards}</details>`
+  :`<h2>Close alternatives</h2><p class="note">These are not exact matches. They are ranked by location first (area, then state, then country), then property type and requirements (bedrooms and type, then features), then budget.</p>${cards}`}
+
+/* ----- Requests and Properties ----- */
+const SQ={req:'',lst:''};
+function vSaved(){
+ const t=savedTab,old=t==='lst'?S.lsts.filter(l=>stale(l.asOf||l.at||Date.now())).length:0;
+ $('v').innerHTML=`<h1>${t==='req'?'Find requests':'Properties'}</h1><p class="lead">${t==='req'?'Everything clients have asked for. Edit, rematch or delete.':'Every property you have imported. Edit, confirm it is still available, or delete.'}</p>
+ <input id="sq" type="search" aria-label="Search" placeholder="${t==='req'?'Search by name, phone or area':'Search by title, area or phone'}" value="${esc(SQ[t])}" oninput="SQ[savedTab]=this.value;$('slist').innerHTML=savedListHTML()">
+ ${old?`<div class="acts"><button class="btn sm danger" onclick="purgeOld()">Delete ${old} older than 30 days</button></div>`:''}
+ <div id="slist">${savedListHTML()}</div>`}
+function purgeOld(){const n=S.lsts.filter(l=>stale(l.asOf||l.at||Date.now())).length;if(!n||!confirm('Delete '+n+' propert'+(n===1?'y':'ies')+' that were last available more than 30 days ago?'))return;S.lsts.filter(l=>stale(l.asOf||l.at||Date.now())).forEach(l=>dropMedia('listing',l.id));S.lsts=S.lsts.filter(l=>!stale(l.asOf||l.at||Date.now()));S.matches=S.matches.filter(m=>S.lsts.some(l=>l.id===m.lstId));persist();render()}
+
+/* ----- Settings and sync ----- */
+function vSet(){
+ const n=OUT.reduce((a,o)=>a+(o.rows?o.rows.length:o.ids.length),0);
+ $('v').innerHTML=`<h1>Settings</h1>
+ <div class="fld"><span class="q">Sync</span><p class="note" style="margin:0 0 8px">${SYNC.state==='offline'?'Offline. Your changes are kept on this device and sent when the connection returns.'+(SYNC.err?' ('+esc(SYNC.err)+')':''):n?n+' change'+(n===1?'':'s')+' waiting to be sent.':SYNC.last?'All changes are saved to Supabase.':'Not synced yet.'}</p>${SYNC.err&&SYNC.state!=='offline'?`<p class="err">${esc(SYNC.err)}</p>`:''}<div class="acts"><button class="btn sm main" onclick="syncNow()">Sync now</button></div></div>
+ <div class="fld"><span class="q">Your workspace code</span><p class="note" style="margin:0 0 8px">Your data is saved under this code. To see the same data on another phone or computer, enter this code there. There is no login yet, so anyone who has the code can see and change your data. Keep it private.</p><code class="code" id="wscode">${esc(WS)}</code><div class="acts"><button class="btn sm" onclick="copyCode()">Copy code</button></div>
+  <label class="q" for="newws" style="margin-top:14px">Use a code from another device</label><input id="newws" placeholder="Paste a workspace code"><div class="acts"><button class="btn sm" onclick="useCode()">Switch to this code</button></div></div>
+ <div class="fld"><span class="q">Your details for posts and replies</span><p class="note" style="margin:0 0 8px">Added to the posts and replies you write. Kept on this device.</p><div class="row2"><input id="me_name" aria-label="Your name" placeholder="Your name" value="${esc(ME.name)}" onchange="saveMe()"><input id="me_phone" aria-label="Your WhatsApp number" inputmode="tel" placeholder="Your WhatsApp number" value="${esc(ME.phone)}" onchange="saveMe()"></div></div>
+ <div class="fld"><span class="q">Connection check</span><p class="note" style="margin:0 0 8px">Tests saving, loading and the photo and video service.</p><div class="acts"><button class="btn sm" onclick="checkConnection()">Run check</button></div><div id="chk"></div></div>
+ <div class="fld"><span class="q">Close alternatives</span><p class="note" style="margin:0 0 8px">How far to look when there is no exact match. Buy and rent are never mixed.</p>
+  <label class="q" for="alt_reach" style="font-size:14px">Reach</label><select id="alt_reach" onchange="setAlt('reach',this.value)"><option value="state" ${ALT.reach==='state'?'selected':''}>Same area or same state</option><option value="country" ${ALT.reach==='country'?'selected':''}>Anywhere in the same country</option></select>
+  <div class="row2 pair"><div><label class="q" for="alt_min" style="font-size:14px">Lowest closeness</label><select id="alt_min" onchange="setAlt('min',this.value)">${[30,40,50,60].map(v=>`<option value="${v}" ${ALT.min===v?'selected':''}>${v}%</option>`).join('')}</select></div><div><label class="q" for="alt_keep" style="font-size:14px">Saved per client</label><select id="alt_keep" onchange="setAlt('keep',this.value)">${[3,5,10].map(v=>`<option value="${v}" ${ALT.keep===v?'selected':''}>${v}</option>`).join('')}</select></div></div></div>
+ <div class="fld"><span class="q">Backup</span><div class="acts"><button class="btn sm" onclick="exportData()">Export backup</button><label class="btn sm" for="bk" style="margin:0">Restore backup</label><input id="bk" type="file" accept=".json,application/json" hidden onchange="importData(this)"></div></div>
+ <div class="fld"><span class="q">Delete everything</span><p class="note" style="margin:0 0 8px">Removes all requests, properties and matches from this workspace and from Supabase. This cannot be undone.</p><div class="acts"><button class="btn sm danger" onclick="wipeAll()">Delete all my data</button></div></div>`}
+try{Object.assign(ALT,JSON.parse(lsGet('pm_alt')||'{}'))}catch(e){}
+function setAlt(k,v){ALT[k]=k==='reach'?(v==='country'?'country':'state'):+v;ALT.show=Math.max(10,ALT.keep);lsSet('pm_alt',JSON.stringify({reach:ALT.reach,min:ALT.min,keep:ALT.keep}));rematchAll();persist();render()}
+function syncNow(){pull()}
+function copyCode(){try{navigator.clipboard.writeText(WS).then(()=>{const b=document.querySelector('[onclick="copyCode()"]');if(b)b.textContent='Copied'})}catch(e){const r=document.createRange();r.selectNodeContents($('wscode'));const s=getSelection();s.removeAllRanges();s.addRange(r)}}
+function useCode(){const v=($('newws').value||'').trim().toLowerCase();if(!UUID_RE.test(v)){alert('That is not a valid workspace code.');return}if(v===WS){alert('This device already uses that code.');return}
+ if(!confirm('Switch to this workspace? The data on this device will be replaced by the data saved under that code.'))return;
+ WS=v;lsSet('pm_workspace',WS);OUT=[];saveOut();S=emptyS();SNAP=emptySnap();lsSet(KEY,JSON.stringify(S));render();pull()}
+async function wipeAll(){if(!confirm('Delete ALL requests, properties and matches?'))return;if(prompt('Type DELETE to confirm')!=='DELETE')return;
+ OUT=[];saveOut();try{await rpc('pm_wipe',{ws:WS});try{await fn('wipe',{})}catch(e){}}catch(e){alert('Could not reach Supabase, so nothing was deleted: '+e.message);return}
+ S=emptyS();SNAP=emptySnap();lsSet(KEY,JSON.stringify(S));activeReq=null;sub='form';render()}
+
+/* ---------- Photos and videos ----------
+   Files are stored in the Supabase bucket "pm-media" under <workspace code>/<id>.<ext>. The pm-media function signs each upload
+   and deletes files; the picture/video records sync like everything else. Pictures are resized before upload. */
+const FN_URL=SB.url+'/functions/v1/pm-media',MEDIA_URL=p=>SB.url+'/storage/v1/object/public/pm-media/'+p;
+async function fn(action,body){
+ for(let i=0;;i++){
+  const r=await fetch(FN_URL,{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json'},body:JSON.stringify(Object.assign({ws:WS,action},body))});
+  let j={};try{j=await r.json()}catch(e){}
+  if(r.ok)return j;
+  if(i<2&&/save a request or listing first/.test(j.error||'')){await new Promise(o=>setTimeout(o,1200));await flush();continue} // the owner may still be on its way to the server
+  throw new Error(j.error||('HTTP '+r.status))}}
+const mediaOf=(type,id)=>S.media.filter(m=>m.ownerType===type&&m.ownerId===id);
+const VEXT={'video/mp4':'mp4','video/webm':'webm','video/quicktime':'mov'},MAX_VIDEO_MB=25,MAX_VIDEO_SEC=60;
+function imgToJpeg(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>{URL.revokeObjectURL(u);b?ok(b):no(new Error('Could not read this picture'))},'image/jpeg',.82)};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('Could not read this picture'))};im.src=u})}
+function videoSeconds(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{const d=v.duration;URL.revokeObjectURL(u);ok(isFinite(d)?d:0)};v.onerror=()=>{URL.revokeObjectURL(u);no(new Error('Could not read this video'))};v.src=u})}
+async function addMedia(type,ownerId,files,statusEl){
+ const errs=[];
+ for(const f of Array.from(files)){
+  try{
+   let blob=f,kind,ext,dur=0;
+   if((f.type||'').startsWith('image/')){kind='image';blob=await imgToJpeg(f);ext='jpg'}
+   else if((f.type||'').startsWith('video/')){kind='video';ext=VEXT[f.type];if(!ext)throw new Error('use an MP4, WebM or MOV video');if(f.size>MAX_VIDEO_MB*1048576)throw new Error('videos must be under '+MAX_VIDEO_MB+' MB');dur=await videoSeconds(f);if(dur>MAX_VIDEO_SEC+1)throw new Error('videos must be '+MAX_VIDEO_SEC+' seconds or shorter')}
+   else throw new Error('only pictures and short videos can be added');
+   if(statusEl)statusEl.textContent='Uploading '+(f.name||kind)+'…';
+   await flush();const id=newCode(),s=await fn('sign-upload',{id,ext}),fd=new FormData();
+   fd.append('cacheControl','31536000');fd.append('',blob,id+'.'+ext);
+   const r=await fetch(s.signedUrl,{method:'PUT',headers:{apikey:SB.key,'x-upsert':'false'},body:fd});
+   if(!r.ok){let m='';try{m=(await r.json()).message}catch(e){}throw new Error(m||'upload failed ('+r.status+')')}
+   S.media.push({id,ownerType:type,ownerId,path:s.path,kind,name:f.name||kind,size:blob.size,duration:dur||null,at:Date.now()});persist()
+  }catch(e){errs.push((f.name||'File')+': '+e.message)}}
+ return errs}
+let FD=[];try{FD=JSON.parse(lsGet('pm_filedel')||'[]')}catch(e){}
+function queueFileDel(paths){FD=FD.concat(paths);lsSet('pm_filedel',JSON.stringify(FD));drainFileDel()}
+async function drainFileDel(){if(!FD.length)return;const b=FD.slice(0,100);try{await fn('delete',{paths:b});FD=FD.slice(b.length);lsSet('pm_filedel',JSON.stringify(FD));if(FD.length)drainFileDel()}catch(e){}}
+function dropMedia(type,id){const ms=mediaOf(type,id);if(!ms.length)return;queueFileDel(ms.map(m=>m.path));S.media=S.media.filter(m=>!(m.ownerType===type&&m.ownerId===id))}
+function delMedia(id){const m=S.media.find(x=>x.id===id);if(!m||!confirm('Delete this '+(m.kind==='video'?'video':'picture')+'?'))return;S.media=S.media.filter(x=>x.id!==id);queueFileDel([m.path]);persist();if(SH.k==='media'){SH.idx=Math.max(0,Math.min(SH.idx,mediaOf(SH.type,SH.id).length-1));paintSheet()}render()}
+const thumb=(m,cls)=>m.kind==='video'?`<video class="${cls}" preload="metadata" muted playsinline src="${esc(MEDIA_URL(m.path))}#t=0.1"></video>`:`<img class="${cls}" loading="lazy" alt="" src="${esc(MEDIA_URL(m.path))}">`;
+function mediaStrip(type,id){const ms=mediaOf(type,id);if(!ms.length)return '';
+ return `<div class="mstrip">${ms.slice(0,4).map((m,i)=>`<button class="mth" aria-label="Open ${m.kind}" onclick="openMedia('${type}','${id}',${i})">${thumb(m,'mimg')}${m.kind==='video'?'<i class="play">▶</i>':''}${i===3&&ms.length>4?`<i class="more">+${ms.length-4}</i>`:''}</button>`).join('')}</div>`}
+const mediaBtn=(type,id)=>{const n=mediaOf(type,id).length;return `<button class="btn sm" onclick="openMedia('${type}','${id}')">Photos &amp; videos${n?' ('+n+')':''}</button>`};
+
+/* ----- A bottom sheet used for media, composing posts and web search ----- */
+let SH={k:''};
+function openSheet(o){SH=o;paintSheet();document.body.style.overflow='hidden'}
+function closeSheet(){SH={k:''};const h=$('sheet');if(h)h.innerHTML='';document.body.style.overflow='';render()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&SH.k)closeSheet()});
+function paintSheet(){
+ let h=$('sheet');if(!h){h=document.createElement('div');h.id='sheet';document.body.appendChild(h)}
+ if(!SH.k){h.innerHTML='';return}
+ const body=SH.k==='media'?sheetMedia():SH.k==='compose'?sheetCompose():sheetWeb();
+ const keep=document.activeElement&&document.activeElement.id,ct=h.querySelector('.sbody');const top=ct?ct.scrollTop:0;
+ h.innerHTML=`<div class="scrim" onclick="closeSheet()"></div><section class="sheet" role="dialog" aria-modal="true" aria-label="${esc(body.title)}"><div class="shead"><b>${esc(body.title)}</b><button class="btn sm" onclick="closeSheet()" id="sclose">Close</button></div><div class="sbody">${body.html}</div></section>`;
+ const nb=h.querySelector('.sbody');if(nb)nb.scrollTop=top;const k=keep&&$(keep);if(k&&k.focus)k.focus();else if(!ct)$('sclose').focus()}
+function ownerName(type,id){if(type==='request'){const r=S.reqs.find(x=>x.id===id);return r?(r.name||'Client'):'Request'}const l=S.lsts.find(x=>x.id===id);return l?l.title:'Property'}
+function sheetMedia(){
+ const ms=mediaOf(SH.type,SH.id),i=Math.min(SH.idx||0,Math.max(0,ms.length-1)),m=ms[i];
+ return{title:'Photos & videos · '+ownerName(SH.type,SH.id),html:`
+ ${m?`<div class="mview">${m.kind==='video'?`<video controls playsinline preload="metadata" src="${esc(MEDIA_URL(m.path))}"></video>`:`<img alt="${esc(m.name||'Picture')}" src="${esc(MEDIA_URL(m.path))}">`}</div>
+ <div class="acts" style="justify-content:space-between"><span class="note" style="margin:0">${i+1} of ${ms.length}${m.kind==='video'&&m.duration?' · '+Math.round(m.duration)+' s':''}</span><span style="display:flex;gap:8px"><button class="btn sm" ${i?'':'disabled'} onclick="SH.idx=${i-1};paintSheet()">Previous</button><button class="btn sm" ${i<ms.length-1?'':'disabled'} onclick="SH.idx=${i+1};paintSheet()">Next</button><a class="btn sm" href="${esc(MEDIA_URL(m.path))}" target="_blank" rel="noopener">Full size</a><button class="btn sm danger" onclick="delMedia('${m.id}')">Delete</button></span></div>
+ <div class="mrail">${ms.map((x,j)=>`<button class="mth ${j===i?'on':''}" aria-label="Show ${j+1}" onclick="SH.idx=${j};paintSheet()">${thumb(x,'mimg')}${x.kind==='video'?'<i class="play">▶</i>':''}</button>`).join('')}</div>`:`<p class="note">No pictures or videos yet.</p>`}
+ ${SH.msg?`<p class="err" role="alert">${esc(SH.msg)}</p>`:''}
+ <label class="btn main block" style="margin-top:12px" for="mfile">Add photos or videos</label><input id="mfile" type="file" accept="image/*,video/*" multiple hidden onchange="onMediaFiles(this)">
+ <p class="hint" id="mstat">Pictures are resized automatically. Videos can be MP4, WebM or MOV, up to ${MAX_VIDEO_SEC} seconds and ${MAX_VIDEO_MB} MB.</p>`}}
+function openMedia(type,id,idx){openSheet({k:'media',type,id,idx:idx||0,msg:''})}
+async function onMediaFiles(inp){const files=Array.from(inp.files||[]);if(!files.length)return;const st=$('mstat'),before=mediaOf(SH.type,SH.id).length;
+ const errs=await addMedia(SH.type,SH.id,files,st);if(SH.k!=='media')return;const n=mediaOf(SH.type,SH.id).length;SH.idx=n>before?n-1:SH.idx;SH.msg=errs.join(' ');paintSheet();render()}
+
+/* ----- Search ----- */
+const SR={q:'',scope:'all',tx:'',kind:'',state:'',min:'',max:'',days:'',media:false};
+const DAYMS=864e5;
+function srFilter(o,isL){
+ const tk=norm(SR.q).split(' ').filter(Boolean),f=[o.title,o.name,o.loc,o.state,o.country,o.kind,kl(o.kind),o.kindText,o.phone,o.contact,o.extra,o.desc].join(' '),h=norm(f);
+ if(!tk.every(t=>h.includes(t)))return false;
+ if(SR.tx&&normTx(o.tx)!==SR.tx)return false;
+ if(SR.kind&&o.kind!==SR.kind)return false;
+ if(SR.state&&!norm([o.state,o.loc].join(' ')).includes(norm(SR.state)))return false;
+ let amt=+(isL?o.price:o.budget)||0;if(isL&&normTx(o.tx)==='rent'&&o.per==='month')amt*=12;
+ if(SR.min&&!(amt>=+SR.min))return false;if(SR.max&&!(amt>0&&amt<=+SR.max))return false;
+ if(SR.days&&!(Date.now()-(o.asOf||o.at||0)<=+SR.days*DAYMS))return false;
+ if(SR.media&&!mediaOf(isL?'listing':'request',o.id).length)return false;
+ return true}
+function searchHTML(){
+ const ls=SR.scope==='req'?[]:S.lsts.filter(l=>srFilter(l,true)),rs=SR.scope==='lst'?[]:S.reqs.filter(r=>srFilter(r,false));
+ const total=ls.length+rs.length,any=SR.q||SR.tx||SR.kind||SR.state||SR.min||SR.max||SR.days||SR.media;
+ if(!S.lsts.length&&!S.reqs.length)return `<div class="empty"><b>Nothing to search yet</b>Import listings or add client requests first.</div>`;
+ return `<p class="note">${any?total+' result'+(total===1?'':'s'):'Showing everything. Type or pick a filter to narrow it down.'}</p>`+
+  (ls.length?`<h2>Properties (${ls.length})</h2>`+ls.slice(0,40).map(lstItem).join('')+(ls.length>40?'<p class="note">Showing the first 40. Narrow the search to see the rest.</p>':''):'')+
+  (rs.length?`<h2>Find requests (${rs.length})</h2>`+rs.slice(0,40).map(reqItem).join('')+(rs.length>40?'<p class="note">Showing the first 40. Narrow the search to see the rest.</p>':''):'')+
+  (any&&!total?`<div class="empty"><b>No results</b>Try fewer words or remove a filter.</div>`:'')}
+function reqQuery(r){const b=bedsOf(r.extra||''),k=r.kind==='other'?(r.kindText||''):kname(r.kind),w=[r.loc,r.state].filter(Boolean).join(' ');return [b?b+' bedroom':'',k,normTx(r.tx)==='rent'?'for rent':'for sale',w?'in '+w:''].filter(Boolean).join(' ')}
+function webLinks(q){const e=encodeURIComponent,g=s=>'https://www.google.com/search?q='+e(q+' site:'+s);
+ return [['Google','https://www.google.com/search?q='+e(q)],['Facebook posts','https://www.facebook.com/search/posts?q='+e(q)],['Facebook groups','https://www.facebook.com/search/groups?q='+e(q)],['Instagram',g('instagram.com')],['X (Twitter)','https://x.com/search?q='+e(q)],['TikTok','https://www.tiktok.com/search?q='+e(q)],['Telegram',g('t.me')],['PropertyPro',g('propertypro.ng')],['Nigeria Property Centre',g('nigeriapropertycentre.com')],['Jiji',g('jiji.ng')],['PrivateProperty',g('privateproperty.com.ng')]]}
+function vSearch(){
+ $('v').innerHTML=`<h1>Search</h1><p class="lead">Look through everything you have saved, or search the internet.</p>
+ <input id="sr_q" type="search" aria-label="Search" placeholder="Name, area, phone, type, anything" value="${esc(SR.q)}" oninput="SR.q=this.value;$('sres').innerHTML=searchHTML();$('webq').value=SR.q">
+ <div class="chips" role="group" aria-label="Search in">${[['all','Everything'],['lst','Properties'],['req','Requests']].map(c=>`<button class="chip ${SR.scope===c[0]?'on':''}" onclick="SR.scope='${c[0]}';vSearch()">${c[1]}</button>`).join('')}</div>
+ <div class="row2"><div><label class="q" for="sr_tx" style="font-size:14px">Category</label><select id="sr_tx" onchange="SR.tx=this.value;$('sres').innerHTML=searchHTML()"><option value="">Any</option><option value="buy" ${SR.tx==='buy'?'selected':''}>To buy / for sale</option><option value="rent" ${SR.tx==='rent'?'selected':''}>To rent / for rent</option></select></div>
+ <div><label class="q" for="sr_kind" style="font-size:14px">Property type</label><select id="sr_kind" onchange="SR.kind=this.value;$('sres').innerHTML=searchHTML()"><option value="">Any</option>${KINDS.filter(k=>k[0]!=='other').map(k=>`<option value="${k[0]}" ${SR.kind===k[0]?'selected':''}>${k[1]}</option>`).join('')}</select></div></div>
+ <div class="row2 pair"><div><label class="q" for="sr_state" style="font-size:14px">State or area</label><input id="sr_state" value="${esc(SR.state)}" placeholder="For example Kaduna" oninput="SR.state=this.value;$('sres').innerHTML=searchHTML()"></div>
+ <div><label class="q" for="sr_days" style="font-size:14px">Last available</label><select id="sr_days" onchange="SR.days=this.value;$('sres').innerHTML=searchHTML()">${[['','Any time'],['7','Past 7 days'],['14','Past 14 days'],['30','Past 30 days'],['60','Past 60 days']].map(o=>`<option value="${o[0]}" ${SR.days===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div></div>
+ <div class="row2 pair"><div><label class="q" for="sr_min" style="font-size:14px">Price or budget from</label><input id="sr_min" inputmode="numeric" value="${esc(SR.min)}" placeholder="0" oninput="SR.min=this.value.replace(/\\D/g,'');$('sres').innerHTML=searchHTML()"></div>
+ <div><label class="q" for="sr_max" style="font-size:14px">up to</label><input id="sr_max" inputmode="numeric" value="${esc(SR.max)}" placeholder="No limit" oninput="SR.max=this.value.replace(/\\D/g,'');$('sres').innerHTML=searchHTML()"></div></div>
+ <label class="chk"><input type="checkbox" ${SR.media?'checked':''} onchange="SR.media=this.checked;$('sres').innerHTML=searchHTML()"> Only items with photos or videos</label>
+ <div id="sres">${searchHTML()}</div>
+ <h2>Search the internet</h2><p class="note">Opens each site's own search in a new tab. Paste what you find into Import, or add the group or page under Sources.</p>
+ <div class="pair"><label class="q" for="webq" style="font-size:14px">What to look for</label><input id="webq" value="${esc(SR.q)}" placeholder="3 bedroom flat for rent Barnawa Kaduna" oninput="SH.web=this.value"></div>
+ ${S.reqs.length?`<div class="pair"><label class="q" for="webreq" style="font-size:14px">Or use a client's request</label><select id="webreq" onchange="if(this.value){const r=S.reqs.find(x=>x.id===this.value);$('webq').value=reqQuery(r)}"><option value="">Choose a client</option>${S.reqs.map(r=>`<option value="${r.id}">${esc((r.name||'Client')+' · '+reqQuery(r))}</option>`).join('')}</select></div>`:''}
+ <div class="acts"><button class="btn main" onclick="openWeb($('webq').value)">Show search links</button></div>`}
+function openWeb(q){q=String(q||'').trim();if(!q){alert('Type what to look for first.');return}openSheet({k:'web',q})}
+function sheetWeb(){const L=webLinks(SH.q);return{title:'Search the internet',html:`<p class="note" style="margin-top:0">“${esc(SH.q)}”</p><div class="linkgrid">${L.map(l=>`<a class="btn" href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join('')}</div><p class="hint">These open the site's own search page. Facebook and Instagram may ask you to log in. The app cannot read the results back, so copy anything useful into Import.</p>`}}
+function webForReq(id){const r=S.reqs.find(x=>x.id===id);if(r)openWeb(reqQuery(r))}
+
+/* ----- Sources: Facebook groups, pages and profiles, WhatsApp numbers and groups, Instagram, Telegram, X, TikTok and real estate sites ----- */
+const SITES={'propertypro.ng':'PropertyPro','nigeriapropertycentre.com':'Nigeria Property Centre','jiji.ng':'Jiji','privateproperty.com.ng':'PrivateProperty','lamudi.com.ng':'Lamudi','zillow.com':'Zillow','rightmove.co.uk':'Rightmove','zoopla.co.uk':'Zoopla','realtor.com':'Realtor.com','property24.com':'Property24','propertyfinder.ae':'Property Finder','bayut.com':'Bayut','buyrentkenya.com':'BuyRentKenya','olx.com.ng':'OLX'};
+const PLATFORMS=[['facebook','Facebook'],['whatsapp','WhatsApp'],['instagram','Instagram'],['telegram','Telegram'],['x','X (Twitter)'],['tiktok','TikTok'],['linkedin','LinkedIn'],['youtube','YouTube'],['website','Website'],['other','Other']];
+const platName=p=>(PLATFORMS.find(x=>x[0]===p)||[0,'Other'])[1];
+function detectSource(raw){
+ let s=String(raw||'').trim();if(!s)return null;
+ const o={platform:'other',kind:'other',name:'',url:'',phone:'',handle:'',notes:''};
+ if(/^\+?[\d\s()-]{9,20}$/.test(s)&&s.replace(/\D/g,'').length>=9){o.platform='whatsapp';o.kind='number';o.phone=s.replace(/[^\d+]/g,'');o.name=s.trim();o.url='https://wa.me/'+waNum(o.phone,'Nigeria');return o}
+ if(/^@[A-Za-z0-9_.]{2,30}$/.test(s)){o.handle=s.slice(1);o.name=s;o.kind='profile';return o}
+ if(!/^https?:\/\//i.test(s)&&/^[\w.-]+\.[a-z]{2,}(\/|\?|$)/i.test(s))s='https://'+s;
+ let u;try{u=new URL(s)}catch(e){o.name=s.slice(0,80);return o}
+ const host=u.hostname.toLowerCase().replace(/^(www|m|web|mbasic|l)\./,''),parts=u.pathname.split('/').filter(Boolean),nice=x=>titleCase(String(x||'').replace(/[-_.]+/g,' ').trim());
+ o.url=u.href;
+ if(/(^|\.)(facebook\.com|fb\.com|fb\.me|fb\.watch)$/.test(host)){o.platform='facebook';
+  if(parts[0]==='groups'){o.kind='group';o.handle=parts[1]||'';o.name=nice(parts[1])+' (Facebook group)'}
+  else if(parts[0]==='profile.php'||u.searchParams.get('id')){o.kind='profile';o.name='Facebook profile'}
+  else if(parts[0]==='pages'){o.kind='page';o.name=nice(parts[1])}
+  else if(parts[0]){o.kind='page';o.handle=parts[0];o.name=nice(parts[0])+' (Facebook)'}
+  else{o.kind='page';o.name='Facebook'};return o}
+ if(host==='wa.me'||host==='api.whatsapp.com'){o.platform='whatsapp';const num=(parts[0]||u.searchParams.get('phone')||'').replace(/\D/g,'');o.kind='number';o.phone=num;o.name=num?'+'+num:'WhatsApp';return o}
+ if(host==='chat.whatsapp.com'||host==='whatsapp.com'&&parts[0]==='channel'){o.platform='whatsapp';o.kind=host==='chat.whatsapp.com'?'group':'channel';o.name='WhatsApp '+(o.kind==='group'?'group':'channel');return o}
+ if(host==='instagram.com'){o.platform='instagram';o.kind='profile';o.handle=parts[0]&&!['p','reel','explore','stories'].includes(parts[0])?parts[0]:'';o.name=o.handle?'@'+o.handle:'Instagram';return o}
+ if(host==='t.me'||host==='telegram.me'){o.platform='telegram';o.kind=/^(\+|joinchat)/.test(parts[0]||'')?'group':'channel';o.handle=parts[0]||'';o.name=o.handle&&!/^\+/.test(o.handle)?'@'+o.handle:'Telegram '+o.kind;return o}
+ if(host==='x.com'||host==='twitter.com'){o.platform='x';o.kind='profile';o.handle=parts[0]||'';o.name=o.handle?'@'+o.handle:'X';return o}
+ if(host==='tiktok.com'){o.platform='tiktok';o.kind='profile';o.handle=(parts[0]||'').replace(/^@/,'');o.name=o.handle?'@'+o.handle:'TikTok';return o}
+ if(host==='linkedin.com'){o.platform='linkedin';o.kind=parts[0]==='company'?'page':'profile';o.name=nice(parts[1])||'LinkedIn';return o}
+ if(/(^|\.)(youtube\.com|youtu\.be)$/.test(host)){o.platform='youtube';o.kind='channel';o.name=nice((parts[0]||'').replace(/^@/,''))||'YouTube';return o}
+ o.platform='website';o.kind='website';o.name=SITES[host]||host;return o}
+function addSource(){
+ const inp=$('src_in'),v=inp.value.trim();if(!v){inp.focus();return}
+ const d=detectSource(v);if(!d)return;
+ if(S.sources.some(x=>(d.url&&x.url===d.url)||(d.phone&&x.phone===d.phone))){SRCMSG='That source is already in your list.';render();return}
+ const nm=($('src_name')&&$('src_name').value.trim())||d.name;
+ S.sources.unshift({id:uid(),platform:d.platform,kind:d.kind,name:nm,url:d.url,phone:d.phone,handle:d.handle,notes:($('src_notes')&&$('src_notes').value.trim())||'',lastUsed:0,at:Date.now()});
+ persist();SRCMSG='Added '+nm+' ('+platName(d.platform)+').';render()}
+let SRCMSG='',SRCF='all',editingSrc=null,SE=null;
+const srcLink=s=>s.url||(s.phone?'https://wa.me/'+waNum(s.phone,'Nigeria'):'');
+function touchSrc(id){const s=S.sources.find(x=>x.id===id);if(s){s.lastUsed=Date.now();persist()}}
+function launchSrc(id){const s=S.sources.find(x=>x.id===id);if(!s)return;const u=srcLink(s);if(!u){alert('This source has no link or number.');return}touchSrc(id);window.open(u,'_blank','noopener')}
+function delSrc(id){const s=S.sources.find(x=>x.id===id);if(!s||!confirm('Remove '+s.name+' from your sources?'))return;S.sources=S.sources.filter(x=>x.id!==id);persist();render()}
+function editSrc(id){const s=S.sources.find(x=>x.id===id);if(!s)return;SE=Object.assign({},s);editingSrc=id;render()}
+function saveSrc(){const i=S.sources.findIndex(x=>x.id===editingSrc);if(i<0)return;if(SE.url){const d=detectSource(SE.url);if(d&&d.url){SE.url=d.url;if(SE.platform==='other'||!SE.platform)SE.platform=d.platform}}S.sources[i]=Object.assign(S.sources[i],SE);persist();editingSrc=null;SE=null;render()}
+function srcForm(){const e=SE;return `<div class="draft"><div class="grid"><div class="full"><label>Name</label><input value="${esc(e.name)}" oninput="SE.name=this.value"></div>
+ <div><label>Platform</label><select onchange="SE.platform=this.value">${PLATFORMS.map(p=>`<option value="${p[0]}" ${e.platform===p[0]?'selected':''}>${p[1]}</option>`).join('')}</select></div>
+ <div><label>Type</label><select onchange="SE.kind=this.value">${['group','page','profile','number','channel','website','other'].map(k=>`<option value="${k}" ${e.kind===k?'selected':''}>${k}</option>`).join('')}</select></div>
+ <div class="full"><label>Link</label><input value="${esc(e.url)}" oninput="SE.url=this.value"></div>
+ <div class="full"><label>Phone / WhatsApp number</label><input inputmode="tel" value="${esc(e.phone)}" oninput="SE.phone=this.value"></div>
+ <div class="full"><label>Notes</label><textarea oninput="SE.notes=this.value">${esc(e.notes)}</textarea></div></div>
+ <div class="acts"><button class="btn sm main" onclick="saveSrc()">Save changes</button><button class="btn sm" onclick="editingSrc=null;SE=null;render()">Cancel</button></div></div>`}
+function srcItem(s){
+ if(editingSrc===s.id)return srcForm();
+ const web=s.platform==='website';
+ return `<div class="item"><h3>${esc(s.name)}</h3><p><span class="tag">${esc(platName(s.platform))}</span>${esc(s.kind)}${s.phone&&s.kind!=='number'?' · '+esc(s.phone):''}</p><p class="clip">${esc(s.kind==='number'?s.phone:(s.url||'').replace(/^https?:\/\//,''))}</p>${s.notes?`<p>${esc(s.notes)}</p>`:''}${s.lastUsed?`<p class="asof">Last used ${esc(dateTxt(s.lastUsed))}</p>`:''}
+ <div class="acts"><button class="btn sm main" onclick="launchSrc('${s.id}')">Launch</button><button class="btn sm" onclick="openCompose('${s.id}','post')">Post</button><button class="btn sm" onclick="openCompose('${s.id}','reply')">Reply</button>${web?`<button class="btn sm" onclick="openWeb(prompt('Search ${esc(s.name)} for:','')||'')">Search</button>`:''}<button class="btn sm" onclick="editSrc('${s.id}')">Edit</button><button class="btn sm danger" onclick="delSrc('${s.id}')">Remove</button></div></div>`}
+function vSources(){
+ const fl=SRCF==='all'?S.sources:S.sources.filter(s=>s.platform===SRCF),used=[...new Set(S.sources.map(s=>s.platform))];
+ $('v').innerHTML=`<h1>Sources</h1><p class="lead">Your Facebook groups, pages and people, WhatsApp numbers and groups, Instagram, Telegram, X, TikTok and real estate websites, in one place.</p>
+ <label class="q" for="src_in">Add a source</label><input id="src_in" placeholder="Paste a link or a phone number" onkeydown="if(event.key==='Enter')addSource()">
+ <div class="row2 pair"><input id="src_name" aria-label="Name (optional)" placeholder="Name (optional)"><input id="src_notes" aria-label="Notes (optional)" placeholder="Notes (optional)"></div>
+ <div class="acts"><button class="btn main" onclick="addSource()">Add</button></div>
+ ${SRCMSG?`<p class="ok" role="status">${esc(SRCMSG)}</p>`:''}
+ ${used.length>1?`<div class="chips" role="group" aria-label="Filter by platform"><button class="chip ${SRCF==='all'?'on':''}" onclick="SRCF='all';render()">All (${S.sources.length})</button>${used.map(p=>`<button class="chip ${SRCF===p?'on':''}" onclick="SRCF='${p}';render()">${esc(platName(p))} (${S.sources.filter(s=>s.platform===p).length})</button>`).join('')}</div>`:''}
+ ${fl.length?fl.map(srcItem).join(''):`<div class="empty"><b>No sources yet</b>Paste a Facebook group link, a WhatsApp number or a real estate website above.</div>`}
+ <p class="note">Launch opens the platform. Post and Reply write the message for you, then open the platform with the text copied or filled in. Facebook, Instagram and most platforms do not let any app post for you, so you press the final button there.</p>`;SRCMSG=''}
+
+/* ----- Writing posts and replies ----- */
+let ME={name:'',phone:''};try{Object.assign(ME,JSON.parse(lsGet('pm_me')||'{}'))}catch(e){}
+const FEATS=d=>{const o=FEAT.filter(f=>f[1].test(String(d||'').toLowerCase())).map(f=>f[0]),p=parkingOf(d);if(p&&!o.includes('parking'))o.unshift(p+' parking space'+(p>1?'s':''));return o};
+const contactLine=()=>ME.name||ME.phone?'Contact: '+[ME.name,ME.phone].filter(Boolean).join(' · '):'';
+function postText(type,id){
+ if(type==='listing'){const l=S.lsts.find(x=>x.id===id);if(!l)return '';const rent=normTx(l.tx)==='rent',f=FEATS(l.desc);
+  return [(rent?'FOR RENT: ':'FOR SALE: ')+l.title+(l.loc?' in '+placeTxt(l):''),priceTxt(l)+'.',f.length?'Features: '+f.join(', ')+'.':'',l.asOf||l.at?'Available as at '+dateTxt(l.asOf||l.at)+'.':'',contactLine()].filter(Boolean).join('\n')}
+ const r=S.reqs.find(x=>x.id===id);if(!r)return '';const rent=normTx(r.tx)==='rent';
+ return [(rent?'WANTED TO RENT: ':'WANTED TO BUY: ')+reqQuery(r).replace(/ for (rent|sale)/,'')+'.','Budget '+money(r.budget,r.currency)+(rent?' a year':'')+'.',r.extra?'Needs: '+r.extra+'.':'',contactLine()].filter(Boolean).join('\n')}
+const REPLY_T=[['avail','Is it still available?'],['client','I have a client for this'],['price','Ask for the best price'],['media','Ask for more photos or videos'],['offer','Offer this property to the client'],['custom','Write my own']];
+function replyText(tpl,lid,rid){
+ const l=S.lsts.find(x=>x.id===lid),r=S.reqs.find(x=>x.id===rid),t=l?l.title+(l.loc?' in '+l.loc:''):'the property',sig=ME.name?'\n'+ME.name:'';
+ if(tpl==='avail')return 'Hello, is the '+t+' still available?'+sig;
+ if(tpl==='client')return 'Hello, I have a client'+(r?' looking for '+reqQuery(r)+', budget '+money(r.budget,r.currency)+(normTx(r.tx)==='rent'?' a year':''):'')+'. Is the '+t+' still available, and what is the final price?'+sig;
+ if(tpl==='price')return 'Hello, what is your best price for the '+t+'?'+sig;
+ if(tpl==='media')return 'Hello, please send more photos or a short video of the '+t+'.'+sig;
+ if(tpl==='offer')return 'Hello'+(r&&r.name?' '+r.name:'')+', I have a property that fits what you asked for: '+(l?l.title+(l.loc?' in '+placeTxt(l):'')+', '+priceTxt(l)+'.':'')+sig;
+ return ''}
+let CP={};
+function openCompose(srcId,mode,itemType,itemId){
+ const first=S.lsts[0],item=itemId?{t:itemType,id:itemId}:first?{t:'listing',id:first.id}:S.reqs[0]?{t:'request',id:S.reqs[0].id}:{t:'listing',id:''};
+ CP={src:srcId||'',mode,type:item.t,id:item.id,tpl:'avail',req:S.reqs[0]?S.reqs[0].id:'',msg:''};CP.text=composeDefault();openSheet({k:'compose'})}
+function composeDefault(){return CP.mode==='post'?postText(CP.type,CP.id):replyText(CP.tpl,CP.type==='listing'?CP.id:'',CP.type==='request'?CP.id:CP.req)}
+function cpSet(k,v){CP[k]=v;if(k==='what'){const [t,i]=v.split(':');CP.type=t;CP.id=i;delete CP.what}CP.text=composeDefault();CP.msg='';paintSheet()}
+function sheetCompose(){
+ const src=S.sources.find(x=>x.id===CP.src),post=CP.mode==='post',n=mediaOf(CP.type,CP.id).length,what=CP.type+':'+CP.id;
+ return{title:(post?'Post':'Reply')+(src?' · '+src.name:''),html:`
+ <div class="sw two" role="group" aria-label="Post or reply" style="margin-top:0"><button class="${post?'on':''}" onclick="CP.mode='post';cpSet('x',0)">Post</button><button class="${post?'':'on'}" onclick="CP.mode='reply';cpSet('x',0)">Reply</button></div>
+ <label class="q" for="cp_src" style="font-size:14px">Send to</label><select id="cp_src" onchange="CP.src=this.value;paintSheet()"><option value="">Just copy or share it</option>${S.sources.map(s=>`<option value="${s.id}" ${s.id===CP.src?'selected':''}>${esc(s.name+' ('+platName(s.platform)+')')}</option>`).join('')}</select>
+ <div class="pair"><label class="q" for="cp_what" style="font-size:14px">${post?'What to post':'Reply about'}</label><select id="cp_what" onchange="cpSet('what',this.value)">${S.lsts.length?`<optgroup label="Properties">${S.lsts.map(l=>`<option value="listing:${l.id}" ${what==='listing:'+l.id?'selected':''}>${esc(l.title+' · '+(l.loc||''))}</option>`).join('')}</optgroup>`:''}${S.reqs.length?`<optgroup label="Find requests">${S.reqs.map(r=>`<option value="request:${r.id}" ${what==='request:'+r.id?'selected':''}>${esc((r.name||'Client')+' · '+reqQuery(r))}</option>`).join('')}</optgroup>`:''}</select></div>
+ ${post?'':`<div class="row2 pair"><div><label class="q" for="cp_tpl" style="font-size:14px">Message</label><select id="cp_tpl" onchange="cpSet('tpl',this.value)">${REPLY_T.map(t=>`<option value="${t[0]}" ${CP.tpl===t[0]?'selected':''}>${t[1]}</option>`).join('')}</select></div>${S.reqs.length?`<div><label class="q" for="cp_req" style="font-size:14px">For client</label><select id="cp_req" onchange="cpSet('req',this.value)">${S.reqs.map(r=>`<option value="${r.id}" ${CP.req===r.id?'selected':''}>${esc(r.name||'Client')}</option>`).join('')}</select></div>`:''}</div>`}
+ <div class="pair"><label class="q" for="cp_text" style="font-size:14px">Message (you can change it)</label><textarea id="cp_text" rows="7" oninput="CP.text=this.value">${esc(CP.text)}</textarea></div>
+ ${CP.msg?`<p class="ok" role="status">${esc(CP.msg)}</p>`:''}
+ <div class="acts"><button class="btn main" onclick="cpCopy()">Copy text</button><button class="btn" onclick="cpShare()">Share${n?' with '+n+' file'+(n===1?'':'s'):''}</button>${src?`<button class="btn" onclick="cpOpen()">Open ${esc(platName(src.platform))}</button>`:''}</div>
+ <p class="hint">${src?platHint(src,post):'Share sends the text'+(n?' and the pictures or videos':'')+' to any app on your phone, such as WhatsApp or Facebook.'}</p>`}}
+function platHint(s,post){return s.platform==='whatsapp'&&s.kind==='number'?'Opens a WhatsApp chat with the message already filled in.':s.platform==='whatsapp'?'WhatsApp groups cannot be filled in for you: the text is copied, the group opens, and you paste it.':s.platform==='x'?'Opens a post with the text filled in.':s.platform==='telegram'?'Opens Telegram\'s share screen with the text.':s.platform==='facebook'?'Facebook does not allow apps to post for you: the text is copied, the page opens, and you paste it into the post box'+(post?'':' or Messenger')+'.':'The text is copied and the page opens, so you can paste it.'}
+async function cpCopy(quiet){try{await navigator.clipboard.writeText(CP.text);if(!quiet){CP.msg='Copied. Paste it where you want it.';paintSheet()}return true}catch(e){const t=$('cp_text');if(t){t.select();try{document.execCommand('copy');if(!quiet){CP.msg='Copied. Paste it where you want it.';paintSheet()}return true}catch(x){}}CP.msg='Could not copy. Select the text and copy it.';paintSheet();return false}}
+async function cpShare(){
+ const ms=mediaOf(CP.type,CP.id).slice(0,6);let files=[];
+ try{for(const m of ms){const r=await fetch(MEDIA_URL(m.path));const b=await r.blob();files.push(new File([b],(m.name||'file').replace(/[^\w.-]/g,'_')+(/\.\w+$/.test(m.name||'')?'':m.kind==='video'?'.mp4':'.jpg'),{type:b.type}))}}catch(e){files=[]}
+ try{
+  if(navigator.share){const d={text:CP.text,files};if(files.length&&navigator.canShare&&navigator.canShare(d)){await navigator.share(d)}else{await navigator.share({text:CP.text});if(files.length){CP.msg='Your phone could not share the files with the text. The text was shared.';paintSheet()}}if(CP.src)touchSrc(CP.src);return}
+ }catch(e){if(e&&e.name==='AbortError')return}
+ await cpCopy()}
+async function cpOpen(){
+ const s=S.sources.find(x=>x.id===CP.src);if(!s)return;const e=encodeURIComponent,t=CP.text;let u=srcLink(s);
+ if(s.platform==='whatsapp'&&s.kind==='number')u='https://wa.me/'+waNum(s.phone,'Nigeria')+'?text='+e(t);
+ else if(s.platform==='x')u='https://x.com/intent/post?text='+e(t);
+ else if(s.platform==='telegram')u='https://t.me/share/url?url='+e(u||'https://t.me')+'&text='+e(t);
+ else if(s.platform==='facebook'&&CP.mode==='reply'&&s.kind==='page'&&s.handle)u='https://m.me/'+e(s.handle);
+ if(!/^https:\/\/(wa\.me|x\.com|t\.me)\//.test(u))await cpCopy(true);
+ touchSrc(s.id);window.open(u,'_blank','noopener');CP.msg=/^https:\/\/(wa\.me|x\.com|t\.me)\//.test(u)?'Opened '+platName(s.platform)+' with your message.':'Text copied. Paste it in '+platName(s.platform)+'.';paintSheet()}
+
+/* ----- Lists: one card per request or property ----- */
+function reqItem(r){const n=S.matches.filter(m=>m.reqId===r.id&&m.status!=='dismissed').length;
+ return `<div class="item"><h3>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</h3><p><span class="tag ${normTx(r.tx)==='rent'?'rent':''}">${esc(txLabel(normTx(r.tx)))}</span>${esc(r.kind==='other'?r.kindText:kl(r.kind))} · ${esc(placeTxt(r))}</p><p>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</p>${r.extra?`<p>${esc(r.extra.length>140?r.extra.slice(0,140)+'…':r.extra)}</p>`:''}${asOfLine(r,'Needed')}${mediaStrip('request',r.id)}<div class="acts"><button class="btn sm main" onclick="MT.req='${r.id}';MT.st='active';MT.msg='';go('mat')">Matches (${n})</button><button class="btn sm" onclick="recheck('${r.id}')">Rematch</button>${mediaBtn('request',r.id)}<button class="btn sm" onclick="openCompose('','post','request','${r.id}')">Post</button><button class="btn sm" onclick="webForReq('${r.id}')">Search web</button><button class="btn sm" onclick="editReq('${r.id}')">Edit</button><button class="btn sm danger" onclick="del('req','${r.id}')">Delete</button></div></div>`}
+function lstItem(l){
+ if(editingLst===l.id)return lstForm();
+ const open=activeLst===l.id,ms=open?matchesForLst(l):[];
+ return `<div class="item"><h3>${esc(l.title)}</h3><p><span class="tag ${normTx(l.tx)==='rent'?'rent':''}">${normTx(l.tx)==='rent'?'For rent':'For sale'}</span>${esc(placeTxt(l))}</p><p>${esc(priceTxt(l))}</p>${asOfLine(l,'Last available')}${mediaStrip('listing',l.id)}<div class="acts"><button class="btn sm" onclick="touchLst('${l.id}')">Available today</button><button class="btn sm main" onclick="activeLst=${open?'null':`'${l.id}'`};render()">${open?'Hide':'Matching clients'}</button>${mediaBtn('listing',l.id)}<button class="btn sm" onclick="openCompose('','post','listing','${l.id}')">Post</button><button class="btn sm" onclick="editLst('${l.id}')">Edit</button><button class="btn sm danger" onclick="del('lst','${l.id}')">Delete</button></div>${open?(ms.length?ms.map(m=>`<div class="match" style="margin:10px 0 0"><div class="hd"><div><h3>${esc(m.r.name||'Client')}${m.r.phone?' · '+esc(m.r.phone):''}</h3><div class="where">${esc(reqLine(m.r))} · ${esc(placeTxt(m.r))}</div><div class="price">Budget ${esc(money(m.r.budget,m.r.currency))}</div>${asOfLine(m.r,'Needed')}</div><span class="tag">Matched</span></div>${checksUI(m.x)}${todoUI(m.x)}${m.r.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${waNum(m.r.phone,m.r.country)}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(m.r.phone)}">Call</a></div>`:''}</div>`).join(''):`<p class="note">No saved ${normTx(l.tx)==='rent'?'rental':'purchase'} request meets every requirement for this property.</p>`):''}</div>`}
+function savedListHTML(){
+ const t=savedTab,q=norm(SQ[t]);
+ if(t==='req'){
+  if(!S.reqs.length)return `<div class="empty"><b>No find requests yet</b>Answer the questions on the Find tab or import client requests.<br><button class="btn main" onclick="newSearch();go('find')">Start a search</button></div>`;
+  const rs=S.reqs.filter(r=>!q||norm([r.name,r.phone,r.loc,r.state,r.kind,r.extra].join(' ')).includes(q));
+  return rs.length?rs.map(reqItem).join(''):`<p class="note">Nothing matches “${esc(SQ.req)}”.</p>`}
+ if(!S.lsts.length)return `<div class="empty"><b>No properties yet</b>Import listings from messages, documents or screenshots.<br><button class="btn main" onclick="M.mode='lst';go('imp')">Import listings</button></div>`;
+ const ls=S.lsts.filter(l=>!q||norm([l.title,l.loc,l.state,l.phone,l.kind,l.desc].join(' ')).includes(q));
+ return ls.length?ls.map(lstItem).join(''):`<p class="note">Nothing matches “${esc(SQ.lst)}”.</p>`}
+function saveMe(){ME={name:$('me_name').value.trim(),phone:$('me_phone').value.trim()};lsSet('pm_me',JSON.stringify(ME))}
+async function checkConnection(){
+ const o=$('chk');o.innerHTML='<p class="note">Checking…</p>';const rows=[];
+ try{const d=await rpc('pm_load',{ws:WS});rows.push(['Saving and loading data',true,(d.requests.length+d.listings.length)+' items online'])}catch(e){rows.push(['Saving and loading data',false,e.message])}
+ try{await fn('ping',{});rows.push(['Photo and video service',true,'Ready'])}catch(e){rows.push(['Photo and video service',false,e.message])}
+ o.innerHTML=rows.map(r=>`<p class="${r[1]?'ok':'err'}" style="margin:6px 0"><b>${r[0]}:</b> ${r[1]?'working':'not working'}. ${esc(r[2])}</p>`).join('')}
+
 /* ---------- State ---------- */
 const KEY='matchmaker_v1';
-let S={reqs:[],lsts:[]};
+let S=emptyS();
 try{const x=localStorage.getItem(KEY);if(x)S=Object.assign(S,JSON.parse(x));else migrate()}catch(e){}
 function migrate(){ // bring over data saved by the older Property Desk app, leaving the old copy untouched
  const old=JSON.parse(localStorage.getItem('propdesk_v1')||'null');if(!old)return;
@@ -427,7 +939,6 @@ function migrate(){ // bring over data saved by the older Property Desk app, lea
  (old.reqs||[]).forEach(r=>S.reqs.push({id:uid(),name:r.name||'',phone:r.phone||'',tx:tx(r.tx),kind:KN.some(k=>k[0]===r.kind)?r.kind:'',kindText:'',loc:r.loc||'',state:'',country:r.country||'Nigeria',budget:+r.budget||'',currency:r.currency||'NGN',extra:r.raw||'',asOf:r.importedAt||r.at||Date.now(),asOfSrc:'earlier import',at:Date.now()}));
  persist()}
 const fixKinds=()=>{[S.lsts,S.reqs].forEach(a=>a.forEach(x=>{if(x.kind==='house')x.kind='';if(x.kind==='flat'&&BLOCK_RE.test((x.title||'')+' '+(x.desc||x.raw||'')))x.kind='block'}))};fixKinds();
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const blank=()=>({id:null,name:'',phone:'',tx:'',kind:'',kindText:'',loc:'',state:'',country:'Nigeria',budget:'',currency:'NGN',extra:''});
 let F=blank(),ERR=[],view='find',sub='form',activeReq=null,activeLst=null,minScore=0,savedTab='req',M={mode:'mixed',text:'',src:'WhatsApp',draft:null,msg:''};
 
@@ -443,12 +954,15 @@ const checksUI=x=>`<ul class="why">${x.checks.map(c=>`<li class="${c.ok?'':'n'}"
 const todoUI=x=>x.todo&&x.todo.length?`<p class="note">Not checked automatically, so confirm with the agent: ${esc(x.todo.join(', '))}.</p>`:'';
 
 /* ---------- Rendering ---------- */
-const ICON={find:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',imp:'<svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>',sav:'<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>'};
+const ICON={src:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>',req:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-5.5 6-5.5s6 2 6 5.5M16 5.5a3 3 0 010 5.6M18 14.8c1.8.7 3 2.3 3 5.2"/></svg>',lst:'<svg viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M9 21v-6h6v6M8 10h.01M12 10h.01M16 10h.01"/></svg>',mat:'<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg>',find:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',imp:'<svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>',sav:'<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>'};
 function go(v){view=v;window.scrollTo(0,0);render()}
+const NAV=[['find','Find'],['req','Requests'],['lst','Listings'],['mat','Matches'],['imp','Import'],['src','Sources']];
+function navTo(k){if(k==='req'||k==='lst'){savedTab=k;view='sav';activeLst=null}else view=k;window.scrollTo(0,0);render()}
 function render(){
- $('nav').innerHTML=[['find','Find'],['imp','Import'],['sav','Saved']].map(t=>`<button class="${view===t[0]?'on':''}" aria-current="${view===t[0]?'page':'false'}" onclick="go('${t[0]}')">${ICON[t[0]]}${t[1]}</button>`).join('');
+ const cur=view==='sav'?savedTab:view,nNew=S.matches.filter(m=>m.status==='new'&&!m.alt).length;
+ $('nav').innerHTML=NAV.map(n=>`<button class="${cur===n[0]?'on':''}" aria-current="${cur===n[0]?'page':'false'}" onclick="navTo('${n[0]}')">${ICON[n[0]]}${n[1]}${n[0]==='mat'&&nNew?`<i class="bdg">${nNew>99?'99+':nNew}</i>`:''}</button>`).join('');
  $('count').textContent=S.lsts.length+' propert'+(S.lsts.length===1?'y':'ies')+' · '+S.reqs.length+' client'+(S.reqs.length===1?'':'s');
- ({find:vFind,imp:vImport,sav:vSaved})[view]()}
+ ({find:vFind,imp:vImport,sav:vSaved,mat:vMatches,set:vSet,search:vSearch,src:vSources})[view]();paintSync()}
 
 /* ----- Find: the questionnaire ----- */
 function vFind(){
@@ -479,20 +993,21 @@ function submitForm(){
  if(ERR.length){render();return}
  const r={id:F.id||uid(),name:F.name.trim(),phone:F.phone.trim(),tx:F.tx,kind:F.kind,kindText:F.kind==='other'?F.kindText.trim():'',loc:F.loc.trim(),state:F.state.trim(),country:F.country.trim(),budget:+F.budget,currency:F.currency,extra:F.extra.trim(),asOf:Date.now(),asOfSrc:'entered',at:Date.now()};
  const i=S.reqs.findIndex(x=>x.id===r.id);if(i>=0)S.reqs[i]=Object.assign(S.reqs[i],r);else S.reqs.unshift(r);
- persist();activeReq=r.id;sub='results';F=blank();window.scrollTo(0,0);render()}
+ runMatch(r.id);persist();activeReq=r.id;sub='results';F=blank();window.scrollTo(0,0);render()}
 function newSearch(){F=blank();ERR=[];sub='form';activeReq=null;window.scrollTo(0,0);render()}
 function editReq(id){const r=S.reqs.find(x=>x.id===id);if(!r)return;F=Object.assign(blank(),r,{budget:String(r.budget||'')});ERR=[];sub='form';view='find';window.scrollTo(0,0);render()}
 
 /* ----- Find: results ----- */
 function listingCard(l,x){
  const wl=waNum(l.phone,l.country),msg=encodeURIComponent('Hello, I am enquiring about the '+l.title+(l.loc?' in '+l.loc:'')+'.');
- return `<article class="match"><div class="hd"><div><h3>${esc(l.title)}</h3><div class="where">${esc(placeTxt(l))}</div><div class="price">${esc(priceTxt(l))}</div>${asOfLine(l,'Last available')}</div><span class="tag">Matched</span></div>${checksUI(x)}${todoUI(x)}${l.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${wl}?text=${msg}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(l.phone)}">Call</a></div>`:''}</article>`}
+ return `<article class="match"><div class="hd"><div><h3>${esc(l.title)}</h3><div class="where">${esc(placeTxt(l))}</div><div class="price">${esc(priceTxt(l))}</div>${asOfLine(l,'Last available')}</div><span class="tag">Matched</span></div>${checksUI(x)}${todoUI(x)}${mediaStrip('listing',l.id)}${l.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${wl}?text=${msg}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(l.phone)}">Call</a></div>`:''}</article>`}
 function vResults(){
  const r=S.reqs.find(x=>x.id===activeReq),{ok,no,other}=matchesForReq(r),cat=normTx(r.tx)==='rent'?'rental':'sale',tot=ok.length+no.length;
- $('v').innerHTML=`<div class="recap"><b>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</b><span>${esc(reqLine(r))}</span><span>${esc(placeTxt(r))}</span><span>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</span><span>Needed as at ${dateTxt(r.asOf||r.at||Date.now())}</span>${r.extra?`<span>${esc(r.extra.length>110?r.extra.slice(0,110)+'…':r.extra)}</span>`:''}<div class="acts"><button class="btn sm" onclick="editReq('${r.id}')">Edit answers</button><button class="btn sm" onclick="newSearch()">New search</button></div></div>
+ $('v').innerHTML=`<div class="recap"><b>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</b><span>${esc(reqLine(r))}</span><span>${esc(placeTxt(r))}</span><span>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</span><span>Needed as at ${dateTxt(r.asOf||r.at||Date.now())}</span>${r.extra?`<span>${esc(r.extra.length>110?r.extra.slice(0,110)+'…':r.extra)}</span>`:''}<div class="acts"><button class="btn sm" onclick="editReq('${r.id}')">Edit answers</button><button class="btn sm" onclick="newSearch()">New search</button><button class="btn sm" onclick="MT.req='${r.id}';MT.st='active';MT.msg='';go('mat')">Open in Matches</button></div></div>
  ${!S.lsts.length?`<div class="empty"><b>No properties saved yet</b>Import listings from WhatsApp messages, documents or screenshots, then come back.<br><button class="btn main" onclick="M.mode='lst';go('imp')">Import listings</button></div>`:`
  <p class="note">${ok.length} of ${tot} ${cat} listing${tot===1?'':'s'} meet every requirement.${other?` ${other} listing${other===1?'':'s'} in the other category ${other===1?'was':'were'} not considered.`:''}</p>
  ${ok.length?ok.map(m=>listingCard(m.l,m.x)).join(''):`<div class="empty"><b>No exact match yet</b>A property is matched only when the type, location, budget and extra requirements all fit.</div>`}
+ ${altHTML(r)}
  ${no.length?`<details><summary>${no.length} ${cat} listing${no.length===1?'':'s'} that did not match</summary>${no.map(m=>`<div class="item"><h3>${esc(m.l.title)}</h3><p>${esc(placeTxt(m.l))}. ${esc(priceTxt(m.l))}</p><ul class="why">${m.x.checks.filter(c=>!c.ok).map(c=>`<li class="n"><b>${c.k}:</b> ${esc(c.n)}</li>`).join('')}</ul></div>`).join('')}</details>`:''}`}`}
 
 /* ----- Import ----- */
@@ -575,7 +1090,7 @@ function saveDrafts(){
    if(S.lsts.some(l=>l.raw&&l.raw===d.raw&&(l.phone||'')===(d.phone||''))){dup++;return}
    S.lsts.unshift(Object.assign(base,{title:d.title||'Property',price:+d.price,per:d.per||'year',beds:d.beds||'',phone:d.phone,contact:d.contact||'',desc:d.desc}));ls++}
  });
- persist();M.draft=keep.length?keep:null;if(!keep.length)M.text='';
+ rematchAll();persist();M.draft=keep.length?keep:null;if(!keep.length)M.text='';
  const n=[];if(rq)n.push(rq+' request'+(rq>1?'s':'')+' saved');if(ls)n.push(ls+' listing'+(ls>1?'s':'')+' saved');if(dup)n.push(dup+' already saved');if(hold)n.push(hold+' still need a category or price');
  M.msg=n.join('. ')+(n.length?'.':'Nothing was selected to save.');render()}
 const stale=ts=>Date.now()-ts>30*864e5;
@@ -585,7 +1100,7 @@ function touchLst(id){const l=S.lsts.find(x=>x.id===id);if(l){l.asOf=Date.now();
 /* ----- Saved ----- */
 let editingLst=null,LE=null;
 function editLst(id){const l=S.lsts.find(x=>x.id===id);if(!l)return;LE=Object.assign({},l);editingLst=id;activeLst=null;render()}
-function saveLst(){const i=S.lsts.findIndex(x=>x.id===editingLst);if(i<0)return;if(!normTx(LE.tx)||!(+LE.price>0)){alert('Choose a category and enter a price.');return}S.lsts[i]=Object.assign(S.lsts[i],LE,{price:+LE.price,title:LE.title||'Property'});persist();editingLst=null;LE=null;render()}
+function saveLst(){const i=S.lsts.findIndex(x=>x.id===editingLst);if(i<0)return;if(!normTx(LE.tx)||!(+LE.price>0)){alert('Choose a category and enter a price.');return}S.lsts[i]=Object.assign(S.lsts[i],LE,{price:+LE.price,title:LE.title||'Property'});rematchAll();persist();editingLst=null;LE=null;render()}
 function lstForm(){const e=LE;return `<div class="draft"><div class="grid"><div class="full"><label>Title</label><input value="${esc(e.title)}" oninput="LE.title=this.value"></div>
  <div class="full"><label>Transaction category</label><select onchange="LE.tx=this.value">${opt('rent',normTx(e.tx),'For rent / to let')}${opt('buy',normTx(e.tx),'For sale')}</select></div>
  <div><label>Property type</label><select onchange="LE.kind=this.value">${opt('',e.kind,'Not stated')}${KINDS.filter(k=>k[0]!=='other').map(k=>opt(k[0],e.kind,k[1])).join('')}</select></div>
@@ -598,19 +1113,13 @@ function lstForm(){const e=LE;return `<div class="draft"><div class="grid"><div 
  <div><label>Contact phone</label><input value="${esc(e.phone)}" oninput="LE.phone=this.value"></div>
  <div class="full"><label>Description (features such as borehole or C of O are read from here)</label><textarea oninput="LE.desc=this.value">${esc(e.desc)}</textarea></div></div>
  <div class="acts"><button class="btn sm main" onclick="saveLst()">Save changes</button><button class="btn sm" onclick="editingLst=null;LE=null;render()">Cancel</button></div></div>`}
-function vSaved(){
- const t=savedTab;
- $('v').innerHTML=`<h1>Saved</h1><div class="sw two" role="group" aria-label="Saved items"><button class="${t==='req'?'on':''}" onclick="savedTab='req';activeLst=null;render()">Clients (${S.reqs.length})</button><button class="${t==='lst'?'on':''}" onclick="savedTab='lst';render()">Properties (${S.lsts.length})</button></div>`+
- (t==='req'?(S.reqs.length?S.reqs.map(r=>`<div class="item"><h3>${esc(r.name||'Client')}${r.phone?' · '+esc(r.phone):''}</h3><p><span class="tag ${normTx(r.tx)==='rent'?'rent':''}">${esc(txLabel(normTx(r.tx)))}</span>${esc(r.kind==='other'?r.kindText:kl(r.kind))} · ${esc(placeTxt(r))}</p><p>Budget ${esc(money(r.budget,r.currency))}${normTx(r.tx)==='rent'?' a year':''}</p>${asOfLine(r,'Needed')}<div class="acts"><button class="btn sm main" onclick="activeReq='${r.id}';sub='results';go('find')">See matches</button><button class="btn sm" onclick="editReq('${r.id}')">Edit</button><button class="btn sm danger" onclick="del('req','${r.id}')">Delete</button></div></div>`).join(''):`<div class="empty"><b>No clients yet</b>Answer the questions on the Find tab or import client requests.<br><button class="btn main" onclick="newSearch();go('find')">Start a search</button></div>`)
- :(S.lsts.length?S.lsts.map(l=>{
-  if(editingLst===l.id)return lstForm();
-  const open=activeLst===l.id,ms=open?matchesForLst(l):[];
-  return `<div class="item"><h3>${esc(l.title)}</h3><p><span class="tag ${normTx(l.tx)==='rent'?'rent':''}">${normTx(l.tx)==='rent'?'For rent':'For sale'}</span>${esc(placeTxt(l))}</p><p>${esc(priceTxt(l))}</p>${asOfLine(l,'Last available')}<div class="acts"><button class="btn sm" onclick="touchLst('${l.id}')">Available today</button><button class="btn sm main" onclick="activeLst=${open?'null':`'${l.id}'`};render()">${open?'Hide':'Matching clients'}</button><button class="btn sm" onclick="editLst('${l.id}')">Edit</button><button class="btn sm danger" onclick="del('lst','${l.id}')">Delete</button></div>${open?(ms.length?ms.map(m=>`<div class="match" style="margin:10px 0 0"><div class="hd"><div><h3>${esc(m.r.name||'Client')}${m.r.phone?' · '+esc(m.r.phone):''}</h3><div class="where">${esc(reqLine(m.r))} · ${esc(placeTxt(m.r))}</div><div class="price">Budget ${esc(money(m.r.budget,m.r.currency))}</div>${asOfLine(m.r,'Needed')}</div><span class="tag">Matched</span></div>${checksUI(m.x)}${todoUI(m.x)}${m.r.phone?`<div class="acts"><a class="btn sm main" href="https://wa.me/${waNum(m.r.phone,m.r.country)}" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="tel:${esc(m.r.phone)}">Call</a></div>`:''}</div>`).join(''):`<p class="note">No saved ${normTx(l.tx)==='rent'?'rental':'purchase'} request meets every requirement for this property.</p>`):''}</div>`}).join(''):`<div class="empty"><b>No properties yet</b>Import listings from messages, documents or screenshots.<br><button class="btn main" onclick="M.mode='lst';go('imp')">Import listings</button></div>`))+
- `<h2>Backup</h2><div class="acts"><button class="btn sm" onclick="exportData()">Export backup</button><label class="btn sm" for="bk" style="margin:0">Restore backup</label><input id="bk" type="file" accept=".json,application/json" hidden onchange="importData(this)"></div><p class="note">Everything is stored on this device only. Export a backup before clearing your browser data.</p>`}
-function del(k,id){if(!confirm('Delete this '+(k==='req'?'client':'property')+'?'))return;if(k==='req'){S.reqs=S.reqs.filter(r=>r.id!==id);if(activeReq===id){activeReq=null;sub='form'}}else{S.lsts=S.lsts.filter(l=>l.id!==id)}persist();render()}
+function del(k,id){if(!confirm('Delete this '+(k==='req'?'client':'property')+'?'))return;if(k==='req'){dropMedia('request',id);S.reqs=S.reqs.filter(r=>r.id!==id);S.matches=S.matches.filter(m=>m.reqId!==id);if(activeReq===id){activeReq=null;sub='form'}}else{dropMedia('listing',id);S.lsts=S.lsts.filter(l=>l.id!==id);S.matches=S.matches.filter(m=>m.lstId!==id)}persist();render()}
 function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='property-matchmaker-backup.json';a.click()}
-function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.reqs)&&!Array.isArray(d.lsts))throw 0;S={reqs:d.reqs||[],lsts:d.lsts||[]};persist();render()}catch(e){alert('That file is not a Property Matchmaker backup.')}};r.readAsText(f)}
+function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.reqs)&&!Array.isArray(d.lsts))throw 0;S={reqs:d.reqs||[],lsts:d.lsts||[],matches:d.matches||[],media:d.media||[],sources:d.sources||[]};fixKinds();persist();render()}catch(e){alert('That file is not a Property Matchmaker backup.')}};r.readAsText(f)}
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
-render();
+render();paintSync();pull();
+window.addEventListener('online',()=>pull());
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pull()});
+setInterval(()=>{if(document.visibilityState==='visible'&&!OUT.length)pull()},90000);
 </script></body></html>
